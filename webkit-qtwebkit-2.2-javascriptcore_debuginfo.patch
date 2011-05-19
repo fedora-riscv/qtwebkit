@@ -1,0 +1,12 @@
+diff -up webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro.javascriptcore_debuginfo webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro
+--- webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro.javascriptcore_debuginfo	2011-05-10 12:43:19.000000000 -0500
++++ webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro	2011-05-13 10:57:21.626144796 -0500
+@@ -22,7 +22,7 @@ contains(QT_CONFIG, embedded):CONFIG += 
+ contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols
+ unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
+ 
+-CONFIG(QTDIR_build) {
++!CONFIG(webkit-debug):CONFIG(QTDIR_build) {
+     # Remove the following 2 lines if you want debug information in JavaScriptCore
+     CONFIG -= separate_debug_info
+     CONFIG += no_debug_info

@@ -1,0 +1,168 @@
+
+%define snap 20110513
+
+Name: qtwebkit
+Version: 2.2
+Release: 2.%{snap}%{?dist}
+Summary: Qt WebKit bindings
+Group: System Environment/Libraries
+License: LGPLv2 with exceptions or GPLv3 with exceptions
+URL: http://trac.webkit.org/wiki/QtWebKit
+## start with, http://gitorious.org/webkit/qtwebkit/archive-tarball/qtwebkit-2.2-tp1
+## then rm -rf *Tests/ , and, ... 
+## tar jcf qtwebkit-developers-qtwebkit-qtwebkit-2.2-tp1.tar.bz2 webkit-qtwebkit
+# or
+# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2 autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
+Source0: webkit-qtwebkit-2.2-%{snap}.tar.xz
+BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+
+# search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
+Patch1: webkit-qtwebkit-2.2-tp1-pluginpath.patch
+# an attempt to make this work with qt-4.6.x too, work-in-progress
+Patch2: webkit-qtwebkit-type-casting.patch
+# include JavaScriptCore -debuginfo too 
+Patch3: webkit-qtwebkit-2.2-javascriptcore_debuginfo.patch
+# don't use -Werror
+Patch4: webkit-qtwebkit-2.2-no_Werror.patch
+
+BuildRequires: bison
+BuildRequires: chrpath
+BuildRequires: flex
+BuildRequires: gperf
+# FIXME, get build to set USE_GSTREAMER=1 -- Rex
+BuildRequires: gstreamer-devel gstreamer-plugins-base-devel
+BuildRequires: libicu-devel
+BuildRequires: pcre-devel
+BuildRequires: perl
+BuildRequires: qt4-devel
+%if 0%{?fedora}
+# for qtlocation and qtmultimediakit
+BuildRequires: qt-mobility-devel >= 1.2
+%endif
+BuildRequires: sqlite-devel
+
+# Not used, gstreamer and qtmultimedia are preferred
+%if 0
+BuildRequires: phonon-devel
+Requires: qt4%{?_isa} >= %{_qt4_version}
+%global phonon_ver %(pkg-config --modversion phonon 2>/dev/null || echo 4.5.0)
+Requires: phonon%{?_isa} >= %{phonon_ver}
+%endif
+
+Obsoletes: qt-webkit < 1:4.7.3
+Provides: qt-webkit = 2:%{version}-%{release}
+Provides: qt4-webkit = 2:%{version}-%{release}
+Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
+
+%description
+%{summary}
+
+%package devel
+Summary: Development files for %{name}
+Group: Development/Libraries
+Requires: %{name}%{?_isa} = %{version}-%{release}
+# when qt_webkit_version.pri was moved from qt-devel => qt-webkit-devel
+Conflicts: qt-devel < 1:4.7.2-9
+Requires: qt4-devel
+Obsoletes: qt-webkit-devel < 1:4.7.3
+Provides:  qt-webkit-devel = 2:%{version}-%{release}
+Provides:  qt4-webkit-devel = 2:%{version}-%{release}
+Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
+%description devel
+%{summary}.
+
+
+%prep
+%setup -q -n webkit-qtwebkit 
+
+%patch1 -p1 -b .pluginpath
+%patch2 -p1 -b .type-cast
+%patch3 -p1 -b .javascriptcore_debuginfo
+%patch4 -p1 -b .no_Werror
+
+
+%build 
+
+PATH=%{_qt4_bindir}:$PATH; export PATH
+QTDIR=%{_qt4_prefix}; export QTDIR
+
+#  --qmakearg="CONFIG+=webkit2"
+#  --install-headers=%{_qt4_headerdir} \
+#  --install-libs=%{_qt4_libdir} \
+# USE_GSTREAMER=1 
+Tools/Scripts/build-webkit \
+  --makeargs="%{?_smp_mflags}" \
+  --qmake=%{_qt4_qmake} \
+  --qt \
+  --release 
+
+  
+%install
+rm -rf %{buildroot} 
+
+make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
+
+## HACK, there has to be a better way
+chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
+chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
+chrpath --list   %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
+chrpath --delete %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
+
+
+%clean
+rm -rf %{buildroot} 
+
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+
+%files
+%defattr(-,root,root,-)
+%{_qt4_libdir}/libQtWebKit.so.4*
+%{_qt4_importdir}/QtWebKit/
+
+%files devel
+%defattr(-,root,root,-)
+%{_qt4_datadir}/mkspecs/modules/qt_webkit_version.pri
+%{_qt4_headerdir}/QtWebKit/
+%{_qt4_libdir}/libQtWebKit.prl
+%{_qt4_libdir}/libQtWebKit.so
+%{_libdir}/pkgconfig/QtWebKit.pc
+
+
+%changelog
+* Fri May 13 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-2.20110513
+- 20110513 qtwebkit-2.2 branch snapshot
+- cleanup deps
+- drop -Werror
+
+* Thu May 12 2011 Than Ngo <than@redhat.com> - 2.2-1
+- 2.2-tp1
+- gstreamer is now default, drop unneeded phonon patch
+
+* Fri Apr 22 2011 Rex Dieter <rdieter@fedoraproject.org> 2.1-4
+- javascriptcore -debuginfo too (#667175)
+
+* Fri Apr 22 2011 Rex Dieter <rdieter@fedoraproject.org> 2.1-3
+- Provides: qt(4)-webkit(-devel) = 2:%%version...
+
+* Thu Apr 21 2011 Rex Dieter <rdieter@fedoraproject.org> 2.1-2
+- -devel: Conflicts: qt-devel < 1:4.7.2-9 (qt_webkit_version.pri)
+- drop old/deprecated Obsoletes/Provides: WebKit-qt
+- use modified, less gigantic tarball
+- patch to use phonon instead of QtMultimediaKit
+- patch pluginpath for /usr/lib{,64}/mozilla/plugins-wrapped
+
+* Tue Apr 19 2011 Rex Dieter <rdieter@fedoraproject.org> 2.1-1
+- 2.1
+
+* Mon Nov 08 2010 Than Ngo <than@redhat.com> - 2.0-2
+- fix webkit to export symbol correctly
+
+* Tue Nov 02 2010 Rex Dieter <rdieter@fedoraproject.org> 2.0-1
+- 2.0 (as released with qt-4.7.0)
+
+* Thu Sep 09 2010 Rex Dieter <rdieter@fedoraproject.org> 2.0-0.1.week32
+- first try, borrowing a lot from debian/kubuntu packaging
