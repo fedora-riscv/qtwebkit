@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.2
-Release: 2.%{snap}%{?dist}
+Release: 3.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -49,7 +49,7 @@ Requires: qt4%{?_isa} >= %{_qt4_version}
 Requires: phonon%{?_isa} >= %{phonon_ver}
 %endif
 
-Obsoletes: qt-webkit < 1:4.7.3
+Obsoletes: qt-webkit < 1:4.8.0
 Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
@@ -64,7 +64,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 # when qt_webkit_version.pri was moved from qt-devel => qt-webkit-devel
 Conflicts: qt-devel < 1:4.7.2-9
 Requires: qt4-devel
-Obsoletes: qt-webkit-devel < 1:4.7.3
+Obsoletes: qt-webkit-devel < 1:4.8.0
 Provides:  qt-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
@@ -86,10 +86,8 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 PATH=%{_qt4_bindir}:$PATH; export PATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-#  --qmakearg="CONFIG+=webkit2"
 #  --install-headers=%{_qt4_headerdir} \
 #  --install-libs=%{_qt4_libdir} \
-# USE_GSTREAMER=1 
 Tools/Scripts/build-webkit \
   --makeargs="%{?_smp_mflags}" \
   --qmake=%{_qt4_qmake} \
@@ -133,6 +131,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu May 19 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-2.20110513
+- bump up Obsoletes: qt-webkit a bit, to be on the safe side
+
 * Fri May 13 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-2.20110513
 - 20110513 qtwebkit-2.2 branch snapshot
 - cleanup deps
