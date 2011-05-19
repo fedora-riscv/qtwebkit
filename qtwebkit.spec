@@ -41,14 +41,6 @@ BuildRequires: qt-mobility-devel >= 1.2
 %endif
 BuildRequires: sqlite-devel
 
-# Not used, gstreamer and qtmultimedia are preferred
-%if 0
-BuildRequires: phonon-devel
-Requires: qt4%{?_isa} >= %{_qt4_version}
-%global phonon_ver %(pkg-config --modversion phonon 2>/dev/null || echo 4.5.0)
-Requires: phonon%{?_isa} >= %{phonon_ver}
-%endif
-
 Obsoletes: qt-webkit < 1:4.8.0
 Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
