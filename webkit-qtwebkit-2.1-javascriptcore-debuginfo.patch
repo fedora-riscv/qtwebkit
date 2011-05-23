@@ -1,0 +1,12 @@
+diff -up webkit-qtwebkit/JavaScriptCore/JavaScriptCore.pro.javascriptcore_debuginfo webkit-qtwebkit/JavaScriptCore/JavaScriptCore.pro
+--- webkit-qtwebkit/JavaScriptCore/JavaScriptCore.pro.javascriptcore_debuginfo	2011-04-15 09:32:17.000000000 -0500
++++ webkit-qtwebkit/JavaScriptCore/JavaScriptCore.pro	2011-05-23 14:10:21.659669096 -0500
+@@ -16,7 +16,7 @@ CONFIG += depend_includepath
+ 
+ contains(QT_CONFIG, embedded):CONFIG += embedded
+ 
+-CONFIG(QTDIR_build) {
++!CONFIG(webkit-debug):CONFIG(QTDIR_build) {
+     # Make sure we compile both debug and release on mac when inside Qt.
+     # This line was extracted from qbase.pri instead of including the whole file
+     win32|mac:!macx-xcode:CONFIG += debug_and_release
