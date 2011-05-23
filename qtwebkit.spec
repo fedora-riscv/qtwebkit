@@ -66,7 +66,10 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 #patch1 -p1 -b .use_phonon
 %patch2 -p1 -b .pluginpath
+# workaround memory exhaustion during linking of libQtWebKit
+%ifnarch s390
 %patch3 -p1 -b .javascriptcore_debuginfo
+%endif
 
 # build script assumes this is present
 mkdir WebKitLibraries ||:
