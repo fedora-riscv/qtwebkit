@@ -1,0 +1,12 @@
+diff -up webkit-qtwebkit/Source/WebKit.pri.shared webkit-qtwebkit/Source/WebKit.pri
+--- webkit-qtwebkit/Source/WebKit.pri.shared	2011-05-24 11:17:56.000000000 +0200
++++ webkit-qtwebkit/Source/WebKit.pri	2011-05-24 11:19:09.000000000 +0200
+@@ -27,7 +27,7 @@ CONFIG(standalone_package): DEFINES *= N
+ CONFIG += depend_includepath
+ DEPENDPATH += $$OUT_PWD
+ 
+-DEFINES += BUILDING_QT__=1
++DEFINES += QT_SHARED BUILDING_QT__=1
+ building-libs {
+     win32-msvc*|win32-icc: INCLUDEPATH += $$PWD/JavaScriptCore/os-win32
+ } else {

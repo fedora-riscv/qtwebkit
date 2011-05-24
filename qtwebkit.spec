@@ -18,12 +18,21 @@ BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
 Patch1: webkit-qtwebkit-2.2-tp1-pluginpath.patch
-# an attempt to make this work with qt-4.6.x too, work-in-progress
+
+# type casting
 Patch2: webkit-qtwebkit-type-casting.patch
-# include JavaScriptCore -debuginfo too 
+
+# include JavaScriptCore -debuginfo except on s390(x) during linking of libQtWebKit
 Patch3: webkit-qtwebkit-2.2-javascriptcore_debuginfo.patch
+
 # don't use -Werror
 Patch4: webkit-qtwebkit-2.2-no_Werror.patch
+
+# fix for qt-4.6.x 
+Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
+
+# shared
+Patch6: webkit-qtwebkit-2.2-shared.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -41,10 +50,20 @@ BuildRequires: qt-mobility-devel >= 1.2
 %endif
 BuildRequires: sqlite-devel
 
+# Not used, gstreamer and qtmultimedia are preferred
+%if 0
+BuildRequires: phonon-devel
+Requires: qt4%{?_isa} >= %{_qt4_version}
+%global phonon_ver %(pkg-config --modversion phonon 2>/dev/null || echo 4.5.0)
+Requires: phonon%{?_isa} >= %{phonon_ver}
+%endif
+
+%if 0%{?fedora}
 Obsoletes: qt-webkit < 1:4.8.0
 Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
+%endif
 
 %description
 %{summary}
@@ -53,13 +72,16 @@ Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
 Summary: Development files for %{name}
 Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
+%if 0%{?fedora}
 # when qt_webkit_version.pri was moved from qt-devel => qt-webkit-devel
 Conflicts: qt-devel < 1:4.7.2-9
 Requires: qt4-devel
-Obsoletes: qt-webkit-devel < 1:4.8.0
+Obsoletes: qt-webkit-devel < 1:4.7.3
 Provides:  qt-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
+%endif
+
 %description devel
 %{summary}.
 
@@ -69,12 +91,12 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 %patch1 -p1 -b .pluginpath
 %patch2 -p1 -b .type-cast
-# workaround memory exhaustion during linking of libQtWebKit on s390
 %ifnarch s390
 %patch3 -p1 -b .javascriptcore_debuginfo
 %endif
 %patch4 -p1 -b .no_Werror
-
+%patch5 -p1 -b .qt46
+%patch6 -p1 -b .shared
 
 %build 
 
@@ -98,9 +120,10 @@ make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
 ## HACK, there has to be a better way
 chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
 chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
+%if 0%{?fedora}
 chrpath --list   %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
 chrpath --delete %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
-
+%endif
 
 %clean
 rm -rf %{buildroot} 
@@ -114,7 +137,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{_qt4_libdir}/libQtWebKit.so.4*
-%{_qt4_importdir}/QtWebKit/
+%{?fedora:%{_qt4_importdir}/QtWebKit/}
 
 %files devel
 %defattr(-,root,root,-)
@@ -126,6 +149,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue May 24 2011 Than Ngo <than@redhat.com> - 2.2-3.20110513
+- fix for qt-4.6.x
+- add condition for rhel
+- enable shared for qtwebkit build
+
 * Thu May 19 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-2.20110513
 - bump up Obsoletes: qt-webkit a bit, to be on the safe side
 
