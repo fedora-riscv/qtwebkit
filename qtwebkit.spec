@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.2
-Release: 3.%{snap}%{?dist}
+Release: 4.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -149,12 +149,12 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Tue May 24 2011 Than Ngo <than@redhat.com> - 2.2-3.20110513
+* Tue May 24 2011 Than Ngo <than@redhat.com> - 2.2-4.20110513
 - fix for qt-4.6.x
 - add condition for rhel
 - enable shared for qtwebkit build
 
-* Thu May 19 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-2.20110513
+* Thu May 19 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-3.20110513
 - bump up Obsoletes: qt-webkit a bit, to be on the safe side
 
 * Fri May 13 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-2.20110513
