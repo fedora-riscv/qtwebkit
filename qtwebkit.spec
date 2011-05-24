@@ -1,20 +1,22 @@
 Name: qtwebkit
-Version: 2.1
-Release: 4%{?dist}
+Version: 2.1.1
+Release: 1%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
-## start with, http://gitorious.org/webkit/qtwebkit/archive-tarball/qtwebkit-2.1.0 
+## start with, http://gitorious.org/webkit/qtwebkit/archive-tarball/qtwebkit-2.1.1
 ## then rm -rf *Tests/ , and, ... 
-## zcat qtwebkit-developers-qtwebkit-qtwebkit-2.1.0.tar.gz | xz > qtwebkit-developers-qtwebkit-qtwebkit-2.1.0.tar.xz
-Source0: qtwebkit-developers-qtwebkit-qtwebkit-2.1.0.tar.xz
+## zcat qtwebkit-developers-qtwebkit-qtwebkit-2.1.1.tar.gz | xz > qtwebkit-developers-qtwebkit-qtwebkit-2.1.1.tar.xz
+Source0: qtwebkit-developers-qtwebkit-qtwebkit-2.1.1.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # use phonon instead of QtMultimediaKit (from qt-mobility)
 Patch1: webkit-qtwebkit-2.1-use_phonon.patch
+
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
 Patch2: webkit-qtwebkit-2.1-pluginpath.patch
+
 # include JavaScriptCore -debuginfo too
 Patch3: webkit-qtwebkit-2.1-javascriptcore-debuginfo.patch
 
@@ -51,12 +53,15 @@ Summary: Development files for %{name}
 Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 # when qt_webkit_version.pri was moved from qt-devel => qt-webkit-devel
+%if 0%{?fedora}
 Conflicts: qt-devel < 1:4.7.2-9
+%endif
 Requires: qt4-devel
 Obsoletes: qt-webkit-devel < 1:4.7.3
 Provides:  qt-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
+
 %description devel
 %{summary}.
 
@@ -127,6 +132,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue May 24 2011 Than Ngo <than@redhat.com> - 2.1.1-1
+- 2.1.1
+- fixups for qt-4.6.x (el6)
+
 * Mon May 23 2011 Rex Dieter <rdieter@fedoraproject.org> 2.1-4
 - use qt-mobility after all
 - backport javascriptcore_debuginfo patch
