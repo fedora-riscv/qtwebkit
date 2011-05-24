@@ -120,7 +120,7 @@ make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
 ## HACK, there has to be a better way
 chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
 chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
-%if 0%{?fedora}
+%if 0%{?_qt4_importdir:1}
 chrpath --list   %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
 chrpath --delete %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
 %endif
@@ -137,7 +137,9 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{_qt4_libdir}/libQtWebKit.so.4*
-%{?fedora:%{_qt4_importdir}/QtWebKit/}
+%if 0%{?_qt4_importdir:1}
+%{_qt4_importdir}/QtWebKit/
+%endif
 
 %files devel
 %defattr(-,root,root,-)
