@@ -98,8 +98,8 @@ rm -rf %{buildroot}
 make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
 
 ## HACK, there has to be a better way
-chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.8.0 ||:
-chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.8.0 ||:
+chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.8.1 ||:
+chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.8.1 ||:
 %if 0%{?_qt4_importdir:1}
 chrpath --list   %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
 chrpath --delete %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
