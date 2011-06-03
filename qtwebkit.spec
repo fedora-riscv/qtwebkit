@@ -1,18 +1,17 @@
 
-%define snap 20110513
+%define snap 20110603
 
 Name: qtwebkit
 Version: 2.2
-Release: 4.%{snap}%{?dist}
+Release: 5.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
-## start with, http://gitorious.org/webkit/qtwebkit/archive-tarball/qtwebkit-2.2-tp1
-## then rm -rf *Tests/ , and, ... 
-## tar jcf qtwebkit-developers-qtwebkit-qtwebkit-2.2-tp1.tar.bz2 webkit-qtwebkit
-# or
-# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2 autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
+# git archive \
+#  --remote git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git \
+#  --prefix=webkit-qtwebkit/ \
+#  qtwebkit-2.2 autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
 Source0: webkit-qtwebkit-2.2-%{snap}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
@@ -38,32 +37,22 @@ BuildRequires: bison
 BuildRequires: chrpath
 BuildRequires: flex
 BuildRequires: gperf
-# FIXME, get build to set USE_GSTREAMER=1 -- Rex
-BuildRequires: gstreamer-devel gstreamer-plugins-base-devel
 BuildRequires: libicu-devel
 BuildRequires: pcre-devel
 BuildRequires: perl
 BuildRequires: qt4-devel
-%if 0%{?fedora}
 # for qtlocation and qtmultimediakit
 BuildRequires: qt-mobility-devel >= 1.2
-%endif
 BuildRequires: sqlite-devel
 
-# Not used, gstreamer and qtmultimedia are preferred
-%if 0
-BuildRequires: phonon-devel
-Requires: qt4%{?_isa} >= %{_qt4_version}
-%global phonon_ver %(pkg-config --modversion phonon 2>/dev/null || echo 4.5.0)
-Requires: phonon%{?_isa} >= %{phonon_ver}
-%endif
-
 %if 0%{?fedora}
-Obsoletes: qt-webkit < 1:4.8.0
+Obsoletes: qt-webkit < 1:4.9.0
 Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
 %endif
+
+%{?_qt4_version:Requires: qt4%{?_isa} >= %{_qt4_version}}
 
 %description
 %{summary}
@@ -72,16 +61,15 @@ Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
 Summary: Development files for %{name}
 Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: qt4-devel
 %if 0%{?fedora}
 # when qt_webkit_version.pri was moved from qt-devel => qt-webkit-devel
 Conflicts: qt-devel < 1:4.7.2-9
-Requires: qt4-devel
-Obsoletes: qt-webkit-devel < 1:4.7.3
+Obsoletes: qt-webkit-devel < 1:4.9.0
 Provides:  qt-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %endif
-
 %description devel
 %{summary}.
 
@@ -151,6 +139,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Jun 03 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-5.20110603
+- 20110603 snapshot
+- drop unused/deprecated phonon/gstreamer support snippets
+- add minimal qt4 dep
+
 * Tue May 24 2011 Than Ngo <than@redhat.com> - 2.2-4.20110513
 - fix for qt-4.6.x
 - add condition for rhel
