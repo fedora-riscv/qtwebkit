@@ -1,7 +1,7 @@
 diff -up webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro.javascriptcore_debuginfo webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro
---- webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro.javascriptcore_debuginfo	2011-05-10 12:43:19.000000000 -0500
-+++ webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro	2011-05-13 10:57:21.626144796 -0500
-@@ -22,7 +22,7 @@ contains(QT_CONFIG, embedded):CONFIG += 
+--- webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro.javascriptcore_debuginfo	2011-06-21 12:13:07.000000000 -0500
++++ webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro	2011-06-21 13:42:02.919456263 -0500
+@@ -22,12 +22,20 @@ contains(QT_CONFIG, embedded):CONFIG += 
  contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols
  unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
  
@@ -10,3 +10,16 @@ diff -up webkit-qtwebkit/Source/JavaScriptCore/JavaScriptCore.pro.javascriptcore
      # Remove the following 2 lines if you want debug information in JavaScriptCore
      CONFIG -= separate_debug_info
      CONFIG += no_debug_info
+ }
+ 
++# optimize for low mem arch s390 (disable debugging, etc...)
++equals(QT_ARCH, s390): {
++    CONFIG -= separate_debug_info
++    CONFIG += no_debug_info
++    QMAKE_CXXFLAGS_RELEASE -= -g
++    QMAKE_CFLAGS_RELEASE -= -g
++}
++
+ *-g++*:QMAKE_CXXFLAGS_RELEASE -= -O2
+ *-g++*:QMAKE_CXXFLAGS_RELEASE += -O3
+ 

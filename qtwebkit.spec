@@ -1,9 +1,9 @@
 
-%define snap 20110603
+%define snap 20110621
 
 Name: qtwebkit
 Version: 2.2
-Release: 5.%{snap}%{?dist}
+Release: 6.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -139,6 +139,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jun 21 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-6.20110621
+- 20110621 snapshot
+- s390: respin javascriptcore_debuginfo.patch to omit -g from CXXFLAGS too
+
 * Fri Jun 03 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-5.20110603
 - 20110603 snapshot
 - drop unused/deprecated phonon/gstreamer support snippets
