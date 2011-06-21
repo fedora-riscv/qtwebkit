@@ -79,9 +79,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 %patch1 -p1 -b .pluginpath
 %patch2 -p1 -b .type-cast
-%ifnarch s390
 %patch3 -p1 -b .javascriptcore_debuginfo
-%endif
 %patch4 -p1 -b .no_Werror
 %patch5 -p1 -b .qt46
 %patch6 -p1 -b .shared
