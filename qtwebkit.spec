@@ -21,8 +21,8 @@ Patch1: webkit-qtwebkit-2.2-tp1-pluginpath.patch
 # type casting
 Patch2: webkit-qtwebkit-type-casting.patch
 
-# include JavaScriptCore -debuginfo except on s390(x) during linking of libQtWebKit
-Patch3: webkit-qtwebkit-2.2-javascriptcore_debuginfo.patch
+# include -debuginfo except on s390(x) during linking of libQtWebKit
+Patch3: webkit-qtwebkit-2.2-debuginfo.patch
 
 # don't use -Werror
 Patch4: webkit-qtwebkit-2.2-no_Werror.patch
@@ -79,7 +79,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 %patch1 -p1 -b .pluginpath
 %patch2 -p1 -b .type-cast
-%patch3 -p1 -b .javascriptcore_debuginfo
+%patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .no_Werror
 %patch5 -p1 -b .qt46
 %patch6 -p1 -b .shared
