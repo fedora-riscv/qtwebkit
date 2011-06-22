@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.2
-Release: 6.%{snap}%{?dist}
+Release: 7.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -137,6 +137,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Jun 22 2011 Dan Horák <dan[at]danny.cz> 2.2-7.20110621
+- bump release for the s390 build fix
+
 * Tue Jun 21 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-6.20110621
 - 20110621 snapshot
 - s390: respin javascriptcore_debuginfo.patch to omit -g from CXXFLAGS too
