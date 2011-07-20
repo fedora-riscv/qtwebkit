@@ -3,15 +3,14 @@
 
 Name: qtwebkit
 Version: 2.2
-Release: 7.%{snap}%{?dist}
+Release: 8.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
 # git archive \
 #  --remote git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git \
-#  --prefix=webkit-qtwebkit/ \
-#  qtwebkit-2.2 autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
+#  --prefix=webkit-qtwebkit/ qtwebkit-2.2 autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
 Source0: webkit-qtwebkit-2.2-%{snap}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
@@ -137,6 +136,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Jul 20 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-8.20110621
+- rebuild (qt48)
+
 * Wed Jun 22 2011 Dan Horák <dan[at]danny.cz> 2.2-7.20110621
 - bump release for the s390 build fix
 
