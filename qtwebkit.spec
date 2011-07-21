@@ -1,36 +1,32 @@
 
-%define snap 20110621
+%define snap week28
 
 Name: qtwebkit
 Version: 2.2
-Release: 8.%{snap}%{?dist}
+Release: 9.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
 # git archive \
 #  --remote git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git \
-#  --prefix=webkit-qtwebkit/ qtwebkit-2.2 autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
-Source0: webkit-qtwebkit-2.2-%{snap}.tar.xz
+#  --prefix=webkit-qtwebkit/ qtwebkit-2.2-%{snap} \
+#  autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
+Source0: qtwebkit-2.2-%{snap}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
 Patch1: webkit-qtwebkit-2.2-tp1-pluginpath.patch
 
-# type casting
-Patch2: webkit-qtwebkit-type-casting.patch
-
 # include -debuginfo except on s390(x) during linking of libQtWebKit
 Patch3: webkit-qtwebkit-2.2-debuginfo.patch
 
-# don't use -Werror
+# https://bugs.webkit.org/show_bug.cgi?id=63941
+# -Wall + -Werror = fail
 Patch4: webkit-qtwebkit-2.2-no_Werror.patch
 
 # fix for qt-4.6.x 
 Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
-
-# shared
-Patch6: webkit-qtwebkit-2.2-shared.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -77,11 +73,10 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %setup -q -n webkit-qtwebkit 
 
 %patch1 -p1 -b .pluginpath
-%patch2 -p1 -b .type-cast
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .no_Werror
 %patch5 -p1 -b .qt46
-%patch6 -p1 -b .shared
+
 
 %build 
 
@@ -136,6 +131,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Jul 20 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-9.week28
+- qtwebkit-2.2-week28 snapshot
+
 * Wed Jul 20 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-8.20110621
 - rebuild (qt48)
 
