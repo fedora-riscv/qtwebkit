@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.2
-Release: 9.%{snap}%{?dist}
+Release: 10.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -131,6 +131,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Jul 23 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-10.week28
+- rebuild
+
 * Wed Jul 20 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-9.week28
 - qtwebkit-2.2-week28 snapshot
 
