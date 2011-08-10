@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.2
-Release: 11.%{snap}%{?dist}
+Release: 12.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -33,6 +33,8 @@ BuildRequires: flex
 BuildRequires: gperf
 BuildRequires: libicu-devel
 BuildRequires: pcre-devel
+# gstreamer media support
+BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gio-2.0) pkgconfig(glib-2.0) 
 BuildRequires: perl
 BuildRequires: qt4-devel
 # for qtlocation and qtmultimediakit
@@ -130,6 +132,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Aug 10 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-12.week31
+- BR: gstreamer-devel bits
+
 * Tue Aug 09 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-11.week31
 - qtwebkit-2.2-week31 snapshot
 
