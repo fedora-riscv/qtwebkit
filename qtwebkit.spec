@@ -34,7 +34,7 @@ BuildRequires: gperf
 BuildRequires: libicu-devel
 BuildRequires: pcre-devel
 # gstreamer media support
-BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gio-2.0) pkgconfig(glib-2.0) 
+BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10) pkgconfig(gio-2.0) pkgconfig(glib-2.0) 
 BuildRequires: perl
 BuildRequires: qt4-devel
 # for qtlocation and qtmultimediakit
