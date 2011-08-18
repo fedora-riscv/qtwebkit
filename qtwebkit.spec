@@ -1,15 +1,15 @@
 
-%define snap week31
+%define snap week32
 
 Name: qtwebkit
 Version: 2.2
-Release: 12.%{snap}%{?dist}
+Release: 13.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
 # git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git ; cd qtwebkit 
-# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2-%{snap} \
+# git archive --prefix=webkit-qtwebkit/ %{snap} qtwebkit-2.2-%{snap} \
 #  autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
 Source0: qtwebkit-2.2-%{snap}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -132,6 +132,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Aug 18 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-13.week32
+- qtwebkit-2.2-week32 snapshot
+
 * Wed Aug 10 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-12.week31
 - BR: gstreamer-devel bits
 
