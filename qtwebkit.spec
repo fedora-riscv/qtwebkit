@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.2
-Release: 13.%{snap}%{?dist}
+Release: 14.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -40,13 +40,10 @@ BuildRequires: qt4-devel
 # for qtlocation and qtmultimediakit
 BuildRequires: qt-mobility-devel >= 1.2
 BuildRequires: sqlite-devel
-
-%if 0%{?fedora}
 Obsoletes: qt-webkit < 1:4.9.0
 Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
-%endif
 
 %{?_qt4_version:Requires: qt4%{?_isa} >= %{_qt4_version}}
 
@@ -58,14 +55,12 @@ Summary: Development files for %{name}
 Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: qt4-devel
-%if 0%{?fedora}
 # when qt_webkit_version.pri was moved from qt-devel => qt-webkit-devel
 Conflicts: qt-devel < 1:4.7.2-9
 Obsoletes: qt-webkit-devel < 1:4.9.0
 Provides:  qt-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
-%endif
 %description devel
 %{summary}.
 
@@ -132,6 +127,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Aug 27 2011 Than Ngo <than@redhat.com> - 2.2-14.week32
+- drop conditional
+
 * Thu Aug 18 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-13.week32
 - qtwebkit-2.2-week32 snapshot
 
