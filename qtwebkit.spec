@@ -38,7 +38,9 @@ BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10) pkgconfig
 BuildRequires: perl
 BuildRequires: qt4-devel
 # for qtlocation and qtmultimediakit
+%if 0%{?fedora}
 BuildRequires: qt-mobility-devel >= 1.2
+%endif
 BuildRequires: sqlite-devel
 Obsoletes: qt-webkit < 1:4.9.0
 Provides: qt-webkit = 2:%{version}-%{release}
