@@ -1,15 +1,15 @@
 
-%define snap week32
+%define snap week34
 
 Name: qtwebkit
 Version: 2.2
-Release: 14.%{snap}%{?dist}
+Release: 15.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
 # git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git ; cd qtwebkit 
-# git archive --prefix=webkit-qtwebkit/ %{snap} qtwebkit-2.2-%{snap} \
+# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2-%{snap} \
 #  autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
 Source0: qtwebkit-2.2-%{snap}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -37,7 +37,7 @@ BuildRequires: pcre-devel
 BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10) pkgconfig(gio-2.0) pkgconfig(glib-2.0) 
 BuildRequires: perl
 BuildRequires: qt4-devel
-# for qtlocation and qtmultimediakit
+# for qtlocation 
 %if 0%{?fedora}
 BuildRequires: qt-mobility-devel >= 1.2
 %endif
@@ -111,7 +111,6 @@ rm -rf %{buildroot}
 
 %postun -p /sbin/ldconfig
 
-
 %files
 %defattr(-,root,root,-)
 %{_qt4_libdir}/libQtWebKit.so.4*
@@ -129,6 +128,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Sep 01 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-15.week34
+- qtwebkit-2.2-week34 snapshot
+
 * Sat Aug 27 2011 Than Ngo <than@redhat.com> - 2.2-14.week32
 - drop conditional
 
