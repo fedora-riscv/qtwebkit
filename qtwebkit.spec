@@ -1,9 +1,9 @@
 
-%define snap week34
+%define snap week35
 
 Name: qtwebkit
 Version: 2.2
-Release: 15.%{snap}%{?dist}
+Release: 16.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -128,6 +128,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Sep 06 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-16.week35
+- qtwebkit-2.2-week35 snapshot
+
 * Thu Sep 01 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-15.week34
 - qtwebkit-2.2-week34 snapshot
 
