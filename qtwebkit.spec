@@ -1,9 +1,9 @@
 
-%define snap week35
+%define snap rc1
 
 Name: qtwebkit
-Version: 2.2
-Release: 16.%{snap}%{?dist}
+Version: 2.2.0
+Release: 0.1.%{snap}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -11,7 +11,7 @@ URL: http://trac.webkit.org/wiki/QtWebKit
 # git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git ; cd qtwebkit 
 # git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2-%{snap} \
 #  autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
-Source0: qtwebkit-2.2-%{snap}.tar.xz
+Source0: qtwebkit-2.2.0-%{snap}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
@@ -128,6 +128,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Sep 14 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-0.1.rc1
+- qtwebkit-2.2.0-rc1
+
 * Tue Sep 06 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2-16.week35
 - qtwebkit-2.2-week35 snapshot
 
