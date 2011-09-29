@@ -1,17 +1,17 @@
 
-%define snap rc1
+#define snap rc1
 
 Name: qtwebkit
 Version: 2.2.0
-Release: 0.1.%{snap}%{?dist}
+Release: 1%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
 # git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git ; cd qtwebkit 
-# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2-%{snap} \
+# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2.0 \
 #  autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
-Source0: qtwebkit-2.2.0-%{snap}.tar.xz
+Source0: qtwebkit-2.2.0.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
@@ -31,17 +31,17 @@ BuildRequires: bison
 BuildRequires: chrpath
 BuildRequires: flex
 BuildRequires: gperf
-BuildRequires: libicu-devel
-BuildRequires: pcre-devel
 # gstreamer media support
 BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10) pkgconfig(gio-2.0) pkgconfig(glib-2.0) 
+BuildRequires: pkgconfig(icu)
+BuildRequires: pkgconfig(libpcre)
+BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork) 
+BuildRequires: pkgconfig(sqlite3)
 BuildRequires: perl
-BuildRequires: qt4-devel
-# for qtlocation 
 %if 0%{?fedora}
+# for QtLocation, QtSensors 
 BuildRequires: qt-mobility-devel >= 1.2
 %endif
-BuildRequires: sqlite-devel
 Obsoletes: qt-webkit < 1:4.9.0
 Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
@@ -128,6 +128,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Sep 29 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-1
+- qtwebkit-2.2.0 (final)
+- more pkgconfig-style deps
+
 * Wed Sep 14 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-0.1.rc1
 - qtwebkit-2.2.0-rc1
 
