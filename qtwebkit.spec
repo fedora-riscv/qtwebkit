@@ -31,9 +31,9 @@ BuildRequires: bison
 BuildRequires: chrpath
 BuildRequires: flex
 BuildRequires: gperf
+BuildRequires: libicu-devel
 # gstreamer media support
 BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10) pkgconfig(gio-2.0) pkgconfig(glib-2.0) 
-BuildRequires: pkgconfig(icu)
 BuildRequires: pkgconfig(libpcre)
 BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork) 
 BuildRequires: pkgconfig(sqlite3)
