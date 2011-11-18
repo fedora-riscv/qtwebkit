@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -27,13 +27,17 @@ Patch4: webkit-qtwebkit-2.2-no_Werror.patch
 # fix for qt-4.6.x 
 Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
 
+# fix for glib-2.31+
+Patch6: webkit-qtwebkit-2.2-glib231.patch
+
 BuildRequires: bison
 BuildRequires: chrpath
 BuildRequires: flex
 BuildRequires: gperf
 BuildRequires: libicu-devel
+BuildRequires: pkgconfig(gio-2.0) pkgconfig(glib-2.0)
 # gstreamer media support
-BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10) pkgconfig(gio-2.0) pkgconfig(glib-2.0) 
+BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10)
 BuildRequires: pkgconfig(libpcre)
 BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork) 
 BuildRequires: pkgconfig(sqlite3)
@@ -74,6 +78,11 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .no_Werror
 %patch5 -p1 -b .qt46
+%if 0%{?fedora} > 16
+# This quick fix works ONLY with GLib >= 2.31. It's harder to fix this portably.
+# See https://bugs.webkit.org/show_bug.cgi?id=69840 for the gory details.
+%patch6 -p1 -b .glib231
+%endif
 
 
 %build 
@@ -128,6 +137,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Nov 18 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-2
+- fix FTBFS against newer glib
+
 * Thu Sep 29 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-1
 - qtwebkit-2.2.0 (final)
 - more pkgconfig-style deps
