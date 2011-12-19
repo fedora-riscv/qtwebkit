@@ -1,15 +1,15 @@
 
 Name: qtwebkit
-Version: 2.2.0
-Release: 3%{?dist}
+Version: 2.2.1
+Release: 1%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
 # git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git ; cd qtwebkit 
-# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2.0 \
+# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2.1 \
 #  autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
-Source0: qtwebkit-2.2.0.tar.xz
+Source0: qtwebkit-%{version}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
@@ -41,6 +41,8 @@ BuildRequires: pkgconfig(libpcre)
 BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork) 
 BuildRequires: pkgconfig(sqlite3)
+BuildRequires: pkgconfig(xext)
+BuildRequires: pkgconfig(xrender)
 BuildRequires: perl
 %if 0%{?fedora}
 # for QtLocation, QtSensors 
@@ -117,7 +119,6 @@ rm -rf %{buildroot}
 
 
 %post -p /sbin/ldconfig
-
 %postun -p /sbin/ldconfig
 
 %files
@@ -137,6 +138,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Dec 19 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.1-1
+- qtwebkit-2.2.1
+- add explicit BR: pkgconfig(xext) pkgconfig(xrender)
+
 * Sun Nov 27 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-3
 - add explicit BR: libjpeg-devel libpng-devel
 
