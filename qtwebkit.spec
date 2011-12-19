@@ -1,9 +1,7 @@
 
-#define snap rc1
-
 Name: qtwebkit
 Version: 2.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -35,10 +33,12 @@ BuildRequires: chrpath
 BuildRequires: flex
 BuildRequires: gperf
 BuildRequires: libicu-devel
+BuildRequires: libjpeg-devel
 BuildRequires: pkgconfig(gio-2.0) pkgconfig(glib-2.0)
 # gstreamer media support
 BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10)
 BuildRequires: pkgconfig(libpcre)
+BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork) 
 BuildRequires: pkgconfig(sqlite3)
 BuildRequires: perl
@@ -137,6 +137,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun Nov 27 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-3
+- add explicit BR: libjpeg-devel libpng-devel
+
 * Fri Nov 18 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.0-2
 - fix FTBFS against newer glib
 
