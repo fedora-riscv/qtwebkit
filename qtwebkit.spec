@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -26,7 +26,7 @@ Patch4: webkit-qtwebkit-2.2-no_Werror.patch
 Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
 
 # fix for glib-2.31+
-Patch6: webkit-qtwebkit-2.2-glib231.patch
+Patch6: qtwebkit-2.2.x-glib231-wk#69840.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -80,11 +80,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .no_Werror
 %patch5 -p1 -b .qt46
-%if 0%{?fedora} > 16
-# This quick fix works ONLY with GLib >= 2.31. It's harder to fix this portably.
-# See https://bugs.webkit.org/show_bug.cgi?id=69840 for the gory details.
 %patch6 -p1 -b .glib231
-%endif
 
 
 %build 
@@ -138,6 +134,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Dec 21 2011 Than Ngo <than@redhat.com> - 2.2.1-2
+- backport the correct patch from trunk to fix glib-2.31 issue
+
 * Mon Dec 19 2011 Rex Dieter <rdieter@fedoraproject.org> 2.2.1-1
 - qtwebkit-2.2.1
 - add explicit BR: pkgconfig(xext) pkgconfig(xrender)
