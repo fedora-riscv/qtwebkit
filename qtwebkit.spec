@@ -26,6 +26,7 @@ Patch4: webkit-qtwebkit-2.2-no_Werror.patch
 Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
 
 # fix for glib-2.31+
+# See https://bugs.webkit.org/show_bug.cgi?id=69840 for the gory details.
 Patch6: qtwebkit-2.2.x-glib231-wk#69840.patch
 
 BuildRequires: bison
