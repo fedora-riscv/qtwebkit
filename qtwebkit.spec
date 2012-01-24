@@ -89,6 +89,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch5 -p1 -b .qt46
 %patch6 -p1 -b .glib231
 %patch7 -p1 -b .ld.gold
+%patch8 -p1 -b .gcc-4.7
 
 %build 
 
@@ -143,6 +144,7 @@ rm -rf %{buildroot}
 %changelog
 * Tue Jan 24 2012 Than Ngo <than@redhat.com> - 2.2.1-4
 - gcc doesn't support flag -fuse-ld=gold yet
+- fix build failure with gcc-4.7 
 
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
