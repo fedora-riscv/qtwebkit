@@ -32,6 +32,9 @@ Patch6: qtwebkit-2.2.x-glib231-wk#69840.patch
 # gcc doesn't support flag -fuse-ld=gold
 Patch7: webkit-qtwebkit-ld.gold.patch
 
+# fix build gcc-4.7 issue
+Patch8: webkit-qtwebkit-gcc-4.7.patch
+
 BuildRequires: bison
 BuildRequires: chrpath
 BuildRequires: flex
