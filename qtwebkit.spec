@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -28,6 +28,9 @@ Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
 # fix for glib-2.31+
 # See https://bugs.webkit.org/show_bug.cgi?id=69840 for the gory details.
 Patch6: qtwebkit-2.2.x-glib231-wk#69840.patch
+
+# gcc doesn't support flag -fuse-ld=gold
+Patch7: webkit-qtwebkit-ld.gold.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -82,7 +85,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch4 -p1 -b .no_Werror
 %patch5 -p1 -b .qt46
 %patch6 -p1 -b .glib231
-
+%patch7 -p1 -b .ld.gold
 
 %build 
 
@@ -135,6 +138,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jan 24 2012 Than Ngo <than@redhat.com> - 2.2.1-4
+- gcc doesn't support flag -fuse-ld=gold yet
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
