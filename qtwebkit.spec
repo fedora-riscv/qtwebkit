@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -88,7 +88,9 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .no_Werror
-%patch5 -p1 -b .qt46
+## don't unconditionally apply this anymore
+## it has side-effects ( like http://bugzilla.redhat.com/761337 )
+#patch5 -p1 -b .qt46
 %patch6 -p1 -b .glib231
 %patch7 -p1 -b .ld.gold
 
@@ -143,6 +145,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri May 11 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.1-6
+- can't render Complex Text Layout (Hindi, Arabic) (#761337)
+
 * Fri May 11 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.1-5
 - respin tarball using upstream make-package.py tool
 
