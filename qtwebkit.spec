@@ -1,15 +1,24 @@
 
 Name: qtwebkit
 Version: 2.2.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
-# git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git ; cd qtwebkit 
-# git archive --prefix=webkit-qtwebkit/ qtwebkit-2.2.1 \
-#  autogen.sh ChangeLog configure.ac GNUmakefile.am Makefile Source/ Tools/ | xz -9
-Source0: qtwebkit-%{version}.tar.xz
+# get make-package.py:
+# $ git clone git://qt.gitorious.org/qtwebkit/tools.git
+# get Qt WebKit source code:
+# $ git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git
+# create a branch from a tag (e.g. qtwebkit-2.2.1):
+# $ git checkout -b qtwebkit-2.2.1 qtwebkit-2.2.1
+# generate the tarball (requires: bison flex gperf):
+# $ make-package.py
+# fix/repack the generated tarball:
+# $ tar xzf qtwebkit-2.2-source.tar.gz
+# $ mv qtwebkit-2.2.1-source/include qtwebkit-2.2.1-source/Source/
+# $ tar cJf qtwebkit-2.2.1-source.tar.xz qtwebkit-2.2.1-source/
+Source0: qtwebkit-%{version}-source.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
@@ -32,13 +41,7 @@ Patch6: qtwebkit-2.2.x-glib231-wk#69840.patch
 # gcc doesn't support flag -fuse-ld=gold
 Patch7: webkit-qtwebkit-ld.gold.patch
 
-# fix build gcc-4.7 issue
-Patch8: webkit-qtwebkit-gcc-4.7.patch
-
-BuildRequires: bison
 BuildRequires: chrpath
-BuildRequires: flex
-BuildRequires: gperf
 BuildRequires: libicu-devel
 BuildRequires: libjpeg-devel
 BuildRequires: pkgconfig(gio-2.0) pkgconfig(glib-2.0)
@@ -50,7 +53,6 @@ BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork)
 BuildRequires: pkgconfig(sqlite3)
 BuildRequires: pkgconfig(xext)
 BuildRequires: pkgconfig(xrender)
-BuildRequires: perl
 %if 0%{?fedora}
 # for QtLocation, QtSensors 
 BuildRequires: qt-mobility-devel >= 1.2
@@ -81,7 +83,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 
 %prep
-%setup -q -n webkit-qtwebkit 
+%setup -q -n qtwebkit-%{version}-source
 
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
@@ -89,26 +91,24 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch5 -p1 -b .qt46
 %patch6 -p1 -b .glib231
 %patch7 -p1 -b .ld.gold
-%patch8 -p1 -b .gcc-4.7
+
 
 %build 
 
 PATH=%{_qt4_bindir}:$PATH; export PATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-#  --install-headers=%{_qt4_headerdir} \
-#  --install-libs=%{_qt4_libdir} \
-Tools/Scripts/build-webkit \
-  --makeargs="%{?_smp_mflags}" \
-  --qmake=%{_qt4_qmake} \
-  --qt \
-  --release 
+pushd Source
+%{_qt4_qmake} 
+popd
+
+make %{?_smp_mflags} -C Source
 
   
 %install
 rm -rf %{buildroot} 
 
-make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
+make install INSTALL_ROOT=%{buildroot} -C Source 
 
 ## HACK, there has to be a better way
 chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
@@ -117,6 +117,7 @@ chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
 chrpath --list   %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
 chrpath --delete %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
 %endif
+
 
 %clean
 rm -rf %{buildroot} 
@@ -142,6 +143,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri May 11 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.1-5
+- respin tarball using upstream make-package.py tool
+
 * Tue Jan 24 2012 Than Ngo <than@redhat.com> - 2.2.1-4
 - gcc doesn't support flag -fuse-ld=gold yet
 - fix build failure with gcc-4.7 
