@@ -1,7 +1,7 @@
 
 Name: qtwebkit
-Version: 2.2.1
-Release: 6%{?dist}
+Version: 2.2.2
+Release: 1%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -10,14 +10,14 @@ URL: http://trac.webkit.org/wiki/QtWebKit
 # $ git clone git://qt.gitorious.org/qtwebkit/tools.git
 # get Qt WebKit source code:
 # $ git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git
-# create a branch from a tag (e.g. qtwebkit-2.2.1):
-# $ git checkout -b qtwebkit-2.2.1 qtwebkit-2.2.1
+# create a branch from a tag (e.g. qtwebkit-2.2.2):
+# $ git checkout -b qtwebkit-2.2.2 qtwebkit-2.2.2
 # generate the tarball (requires: bison flex gperf):
 # $ make-package.py
 # fix/repack the generated tarball:
-# $ tar xzf qtwebkit-2.2-source.tar.gz
-# $ mv qtwebkit-2.2.1-source/include qtwebkit-2.2.1-source/Source/
-# $ tar cJf qtwebkit-2.2.1-source.tar.xz qtwebkit-2.2.1-source/
+# $ tar xzf qtwebkit-2.2.2-source.tar.gz
+# $ mv qtwebkit-2.2.2-source/include qtwebkit-2.2.2-source/Source/
+# $ tar cJf qtwebkit-2.2.2-source.tar.xz qtwebkit-2.2.2-source/
 Source0: qtwebkit-%{version}-source.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
@@ -29,7 +29,7 @@ Patch3: webkit-qtwebkit-2.2-debuginfo.patch
 
 # https://bugs.webkit.org/show_bug.cgi?id=63941
 # -Wall + -Werror = fail
-Patch4: webkit-qtwebkit-2.2-no_Werror.patch
+Patch4: qtwebkit-2.2.2-no_Werror.patch
 
 # fix for qt-4.6.x 
 Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
@@ -145,6 +145,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue May 22 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.2-1
+- qtwebkit-2.2.2
+
 * Fri May 11 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.1-6
 - can't render Complex Text Layout (Hindi, Arabic) (#761337)
 
