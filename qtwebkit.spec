@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -145,6 +145,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Tue May 22 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.2-1
 - qtwebkit-2.2.2
 
