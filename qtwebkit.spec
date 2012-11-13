@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -40,6 +40,11 @@ Patch6: qtwebkit-2.2.x-glib231-wk#69840.patch
 
 # gcc doesn't support flag -fuse-ld=gold
 Patch7: webkit-qtwebkit-ld.gold.patch
+
+# svg infinite loop 
+# https://projects.kde.org/news/177
+# https://bugs.webkit.org/show_bug.cgi?id=97258
+Patch8: qtwebkit-svg_infinite_loop.patch
 
 BuildRequires: chrpath
 BuildRequires: libicu-devel
@@ -93,6 +98,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 #patch5 -p1 -b .qt46
 %patch6 -p1 -b .glib231
 %patch7 -p1 -b .ld.gold
+%patch8 -p1 -b .svn_infinite_loop
 
 
 %build 
@@ -145,6 +151,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Nov 13 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.2-3
+- Certain SVG content freezes QtWebKit (webkit#97258)
+
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
