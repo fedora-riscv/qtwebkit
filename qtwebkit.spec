@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -27,16 +27,8 @@ Patch1: webkit-qtwebkit-2.2-tp1-pluginpath.patch
 # include -debuginfo except on s390(x) during linking of libQtWebKit
 Patch3: webkit-qtwebkit-2.2-debuginfo.patch
 
-# https://bugs.webkit.org/show_bug.cgi?id=63941
-# -Wall + -Werror = fail
-Patch4: qtwebkit-2.2.2-no_Werror.patch
-
 # fix for qt-4.6.x 
 Patch5: webkit-qtwebkit-2.2tp1-qt46.patch
-
-# fix for glib-2.31+
-# See https://bugs.webkit.org/show_bug.cgi?id=69840 for the gory details.
-Patch6: qtwebkit-2.2.x-glib231-wk#69840.patch
 
 # gcc doesn't support flag -fuse-ld=gold
 Patch7: webkit-qtwebkit-ld.gold.patch
@@ -45,6 +37,11 @@ Patch7: webkit-qtwebkit-ld.gold.patch
 # https://projects.kde.org/news/177
 # https://bugs.webkit.org/show_bug.cgi?id=97258
 Patch8: qtwebkit-svg_infinite_loop.patch
+
+## upstream patches
+Patch102: 0002-JSString-resolveRope-should-report-extra-memory-cost.patch
+Patch103: 0003-Fix-build-with-GLib-2.31.patch
+Patch105: 0005-Fix-build-on-linux-i386-where-gcc-would-produce-warn.patch
 
 BuildRequires: chrpath
 BuildRequires: libicu-devel
@@ -92,13 +89,14 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
-%patch4 -p1 -b .no_Werror
 ## don't unconditionally apply this anymore
 ## it has side-effects ( like http://bugzilla.redhat.com/761337 )
 #patch5 -p1 -b .qt46
-%patch6 -p1 -b .glib231
 %patch7 -p1 -b .ld.gold
 %patch8 -p1 -b .svn_infinite_loop
+%patch102 -p1 -b .0002
+%patch103 -p1 -b .0003
+%patch105 -p1 -b .0005
 
 
 %build 
@@ -151,6 +149,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Dec 24 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.2-4
+- switch to upstream versions of some patches
+
 * Tue Nov 13 2012 Rex Dieter <rdieter@fedoraproject.org> 2.2.2-3
 - Certain SVG content freezes QtWebKit (webkit#97258)
 
