@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.2
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -37,6 +37,9 @@ Patch7: webkit-qtwebkit-ld.gold.patch
 # https://projects.kde.org/news/177
 # https://bugs.webkit.org/show_bug.cgi?id=97258
 Patch8: qtwebkit-svg_infinite_loop.patch
+
+# fix 64k pagesize issue
+Patch9: qtwebkit-64k-pagesize.patch
 
 ## upstream patches
 # https://bugzilla.redhat.com/891464
@@ -97,6 +100,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 #patch5 -p1 -b .qt46
 %patch7 -p1 -b .ld.gold
 %patch8 -p1 -b .svn_infinite_loop
+%patch9 -p1 -b .64kpagesize
 %patch100 -p1 -b .webkit72285
 %patch102 -p1 -b .0002
 %patch103 -p1 -b .0003
@@ -153,6 +157,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Jan 11 2013 Than Ngo <than@redhat.com> 2.2.2-6
+- bz#893447, fix 64k pagesize issue
+
 * Fri Jan 04 2013 Rex Dieter <rdieter@fedoraproject.org> 2.2.2-5
 - segfault in requiresLineBox at rendering/RenderBlockLineLayout.cpp (#891464)
 
