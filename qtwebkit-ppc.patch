@@ -1,0 +1,9 @@
+diff -up qtwebkit-2.2.2-source/Source/common.pri.me qtwebkit-2.2.2-source/Source/common.pri
+--- qtwebkit-2.2.2-source/Source/common.pri.me	2013-01-15 17:42:21.363617854 +0100
++++ qtwebkit-2.2.2-source/Source/common.pri	2013-01-15 17:43:48.633859421 +0100
+@@ -13,3 +13,5 @@ contains(JAVASCRIPTCORE_JIT,no): DEFINES
+ # We use this flag on production branches
+ # See https://bugs.webkit.org/show_bug.cgi?id=60824
+ CONFIG += production
++
++DEFINES+=USE_SYSTEM_MALLOC=1

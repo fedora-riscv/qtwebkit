@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.2.2
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -40,6 +40,9 @@ Patch8: qtwebkit-svg_infinite_loop.patch
 
 # fix 64k pagesize issue
 Patch9: qtwebkit-64k-pagesize.patch
+
+# use SYSTEM_MALLOC on ppc/ppc64
+Patch10: qtwebkit-ppc.patch
 
 ## upstream patches
 # https://bugzilla.redhat.com/891464
@@ -101,6 +104,9 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch7 -p1 -b .ld.gold
 %patch8 -p1 -b .svn_infinite_loop
 %patch9 -p1 -b .64kpagesize
+%ifarch ppc ppc64
+%patch10 -p1 -b .system-malloc
+%endif
 %patch100 -p1 -b .webkit72285
 %patch102 -p1 -b .0002
 %patch103 -p1 -b .0003
@@ -157,6 +163,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jan 15 2013 Than Ngo <than@redhat.com> - 2.2.2-7
+- use SYSTEM_MALLOC on ppc/ppc64
+
 * Fri Jan 11 2013 Than Ngo <than@redhat.com> 2.2.2-6
 - bz#893447, fix 64k pagesize issue
 
