@@ -131,12 +131,8 @@ rm -rf %{buildroot}
 make install INSTALL_ROOT=%{buildroot} -C Source 
 
 ## HACK, there has to be a better way
-chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
-chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.0 ||:
-%if 0%{?_qt4_importdir:1}
-chrpath --list   %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
-chrpath --delete %{buildroot}%{_qt4_importdir}/QtWebKit/libqmlwebkitplugin.so ||:
-%endif
+chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.?
+chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.9.? ||:
 
 
 %clean
@@ -163,6 +159,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jan 22 2013 Rex Dieter <rdieter@fedoraproject.org> 2.2.2-8
+- fix rpath (#902571)
+
 * Tue Jan 15 2013 Than Ngo <than@redhat.com> - 2.2.2-7
 - use SYSTEM_MALLOC on ppc/ppc64
 
