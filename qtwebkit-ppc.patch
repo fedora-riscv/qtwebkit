@@ -1,9 +1,26 @@
-diff -up qtwebkit-2.2.2-source/Source/common.pri.me qtwebkit-2.2.2-source/Source/common.pri
---- qtwebkit-2.2.2-source/Source/common.pri.me	2013-01-15 17:42:21.363617854 +0100
-+++ qtwebkit-2.2.2-source/Source/common.pri	2013-01-15 17:43:48.633859421 +0100
-@@ -13,3 +13,5 @@ contains(JAVASCRIPTCORE_JIT,no): DEFINES
- # We use this flag on production branches
- # See https://bugs.webkit.org/show_bug.cgi?id=60824
- CONFIG += production
-+
-+DEFINES+=USE_SYSTEM_MALLOC=1
+diff -up webkit-qtwebkit-23/Source/cmake/WebKitFeatures.cmake.me webkit-qtwebkit-23/Source/cmake/WebKitFeatures.cmake
+--- webkit-qtwebkit-23/Source/cmake/WebKitFeatures.cmake.me	2013-02-25 15:53:12.278297141 +0100
++++ webkit-qtwebkit-23/Source/cmake/WebKitFeatures.cmake	2013-02-25 15:53:42.134167593 +0100
+@@ -125,7 +125,7 @@ MACRO (WEBKIT_OPTION_BEGIN)
+     WEBKIT_OPTION_DEFINE(ENABLE_WORKERS "Toggle Web Workers support" OFF)
+     WEBKIT_OPTION_DEFINE(ENABLE_XHR_TIMEOUT "Toggle XHR timeout support" OFF)
+     WEBKIT_OPTION_DEFINE(ENABLE_XSLT "Toggle XSLT support" ON)
+-    WEBKIT_OPTION_DEFINE(USE_SYSTEM_MALLOC "Toggle system allocator instead of TCmalloc" OFF)
++    WEBKIT_OPTION_DEFINE(USE_SYSTEM_MALLOC "Toggle system allocator instead of TCmalloc" ON)
+     WEBKIT_OPTION_DEFINE(WTF_USE_TILED_BACKING_STORE "Toggle Tiled Backing Store support" OFF)
+     WEBKIT_OPTION_DEFINE(WTF_USE_WTFURL "Toogle the use of WTFURL for URL parsing" OFF)
+ ENDMACRO ()
+diff -up webkit-qtwebkit-23/Source/WTF/wtf/PageAllocationAligned.cpp.me webkit-qtwebkit-23/Source/WTF/wtf/PageAllocationAligned.cpp
+--- webkit-qtwebkit-23/Source/WTF/wtf/PageAllocationAligned.cpp.me	2013-02-25 15:54:06.974227858 +0100
++++ webkit-qtwebkit-23/Source/WTF/wtf/PageAllocationAligned.cpp	2013-02-25 15:55:02.355132792 +0100
+@@ -50,7 +50,9 @@ PageAllocationAligned PageAllocationAlig
+     vm_map(current_task(), &address, size, alignmentMask, flags, MEMORY_OBJECT_NULL, 0, FALSE, protection, PROT_READ | PROT_WRITE | PROT_EXEC, VM_INHERIT_DEFAULT);
+     return PageAllocationAligned(reinterpret_cast<void*>(address), size);
+ #else
+-    size_t alignmentDelta = alignment - pageSize();
++    size_t pagesize =  pageSize();
++    if (alignment < pagesize) alignment = pagesize;
++    size_t alignmentDelta = alignment - pagesize;
+ 
+     // Resererve with suffcient additional VM to correctly align.
+     size_t reservationSize = size + alignmentDelta;

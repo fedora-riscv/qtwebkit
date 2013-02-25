@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.3
-Release: 0.1.beta2%{?dist}
+Release: 0.2.beta2%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -158,6 +158,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Feb 25 2013 Than Ngo <than@redhat.com> - 2.3-0.2.beta2
+- fix 64k page issue on ppc/ppc64
+
 * Thu Feb 21 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.1.beta2
 - qtwebkit-2.3-beta2
 
