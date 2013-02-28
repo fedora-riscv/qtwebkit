@@ -24,3 +24,26 @@ diff -up webkit-qtwebkit-23/Source/WTF/wtf/PageAllocationAligned.cpp.me webkit-q
  
      // Resererve with suffcient additional VM to correctly align.
      size_t reservationSize = size + alignmentDelta;
+diff -up webkit-qtwebkit-23/Source/WebCore/WebCore.pri.me webkit-qtwebkit-23/Source/WebCore/WebCore.pri
+--- webkit-qtwebkit-23/Source/WebCore/WebCore.pri.me	2013-02-27 16:28:34.011342949 +0100
++++ webkit-qtwebkit-23/Source/WebCore/WebCore.pri	2013-02-27 16:31:35.961855804 +0100
+@@ -7,7 +7,7 @@
+ 
+ SOURCE_DIR = $${ROOT_WEBKIT_DIR}/Source/WebCore
+ 
+-equals(QT_ARCH, s390)|equals(QT_ARCH, arm)|equals(QT_ARCH, mips)|equals(QT_ARCH, i386)|equals(QT_ARCH, i686)|equals(QT_ARCH, x86_64) {
++equals(QT_ARCH, s390)|equals(QT_ARCH, arm)|equals(QT_ARCH, mips)|equals(QT_ARCH, i386)|equals(QT_ARCH, i686)|equals(QT_ARCH, x86_64)|equals(QT_ARCH, powerpc64)|equals(QT_ARCH, powerpc) {
+     message("WebCore workaround for QtWebkit: do not build with -g, but with -g1")
+     QMAKE_CXXFLAGS_RELEASE -= -g
+     QMAKE_CXXFLAGS_RELEASE += -g1
+--- webkit-qtwebkit-23/Source/WTF/wtf/Platform.h.system-malloc	2013-02-15 16:46:12.000000000 +0100
++++ webkit-qtwebkit-23/Source/WTF/wtf/Platform.h	2013-02-27 14:50:28.044688152 +0100
+@@ -1011,7 +1011,7 @@
+ #define ENABLE_REGEXP_TRACING 0
+ 
+ /* Yet Another Regex Runtime - turned on by default for JIT enabled ports. */
+-#if !defined(ENABLE_YARR_JIT) && (ENABLE(JIT) || ENABLE(LLINT_C_LOOP)) && !PLATFORM(CHROMIUM)
++#if !defined(ENABLE_YARR_JIT) && ENABLE(JIT) && !PLATFORM(CHROMIUM)
+ #define ENABLE_YARR_JIT 1
+ 
+ /* Setting this flag compares JIT results with interpreter results. */

@@ -37,7 +37,7 @@ Patch4: qtwebkit-2.3-save_memory.patch
 # don't disable fontconfig on production_build (linking fails)
 Patch5: qtwebkit-2.3-fontconfig.patch
 
-# use SYSTEM_MALLOC on ppc/ppc64
+# use SYSTEM_MALLOC on ppc/ppc64, -g1 on ppc/ppc64 to reduce archive size 
 Patch10: qtwebkit-ppc.patch
 
 ## upstream patches
@@ -114,7 +114,7 @@ QTDIR=%{_qt4_prefix}; export QTDIR
 ./Tools/Scripts/build-webkit \
   --qt \
   --qmakearg="CONFIG+=production_build" \
-  --makeargs=-j1
+  --makeargs=%{?_smp_mflags}
 
   
 %install
@@ -160,6 +160,7 @@ rm -rf %{buildroot}
 %changelog
 * Mon Feb 25 2013 Than Ngo <than@redhat.com> - 2.3-0.2.beta2
 - fix 64k page issue on ppc/ppc64
+- set -g1 on ppc/ppc64 to reduce archive size
 
 * Thu Feb 21 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.1.beta2
 - qtwebkit-2.3-beta2
