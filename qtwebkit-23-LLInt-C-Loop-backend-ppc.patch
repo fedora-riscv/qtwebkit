@@ -1,0 +1,70 @@
+diff -up webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter32_64.asm.me webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter32_64.asm
+--- webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter32_64.asm.me	2013-03-05 11:04:22.310433797 -0500
++++ webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter32_64.asm	2013-03-05 11:06:38.090812599 -0500
+@@ -1708,7 +1708,7 @@ _llint_op_next_pname:
+     loadi 20[PC], t2
+     loadi PayloadOffset[cfr, t2, 8], t2
+     loadp JSPropertyNameIterator::m_jsStrings[t2], t3
+-    loadi [t3, t0, 8], t3
++    loadi PayloadOffset[t3, t0, 8], t3
+     addi 1, t0
+     storei t0, PayloadOffset[cfr, t1, 8]
+     loadi 4[PC], t1
+diff -up webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.asm.me webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.asm
+--- webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.asm.me	2013-03-05 11:06:49.860844108 -0500
++++ webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.asm	2013-03-05 11:08:11.801073003 -0500
+@@ -267,13 +267,13 @@ macro assertNotConstant(index)
+ end
+ 
+ macro functionForCallCodeBlockGetter(targetRegister)
+-    loadp Callee[cfr], targetRegister
++    loadp Callee + PayloadOffset[cfr], targetRegister
+     loadp JSFunction::m_executable[targetRegister], targetRegister
+     loadp FunctionExecutable::m_codeBlockForCall[targetRegister], targetRegister
+ end
+ 
+ macro functionForConstructCodeBlockGetter(targetRegister)
+-    loadp Callee[cfr], targetRegister
++    loadp Callee + PayloadOffset[cfr], targetRegister
+     loadp JSFunction::m_executable[targetRegister], targetRegister
+     loadp FunctionExecutable::m_codeBlockForConstruct[targetRegister], targetRegister
+ end
+@@ -845,7 +845,7 @@ macro interpretResolveWithBase(opcodeLen
+     getResolveOperation(4, t0, t1)
+     btpz t0, .slowPath
+ 
+-    loadp ScopeChain[cfr], t3
++    loadp ScopeChain + PayloadOffset[cfr], t3
+     # Get the base
+     loadis ResolveOperation::m_operation[t0], t2
+ 
+diff -up webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp.me webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp
+--- webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp.me	2013-03-05 09:52:14.957967552 -0500
++++ webkit-qtwebkit-23/Source/JavaScriptCore/llint/LowLevelInterpreter.cpp	2013-03-05 11:09:32.411298487 -0500
+@@ -33,6 +33,7 @@
+ 
+ #if ENABLE(LLINT_C_LOOP)
+ #include "CodeBlock.h"
++#include "JSValueInlines.h"
+ #include "LLIntCLoop.h"
+ #include "LLIntSlowPaths.h"
+ #include "VMInspector.h"
+@@ -116,6 +117,18 @@ static double Ints2Double(uint32_t lo, u
+     u.ival64 = (static_cast<uint64_t>(hi) << 32) | lo;
+     return u.dval;
+ }
++
++static void Double2Ints(double input, intptr_t& lo, intptr_t& hi)
++{
++    union {
++        double dval;
++        uint64_t ival64;
++    } u;
++    u.dval = input;
++    hi = static_cast<intptr_t>(u.ival64 >> 32);
++    lo = static_cast<intptr_t>(u.ival64);
++}
++
+ #endif // USE(JSVALUE32_64)
+ 
+ } // namespace LLint

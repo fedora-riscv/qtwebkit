@@ -1,7 +1,7 @@
 
 Name: qtwebkit
 Version: 2.3
-Release: 0.2.beta2%{?dist}
+Release: 0.3.beta2%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -39,6 +39,9 @@ Patch5: qtwebkit-2.3-fontconfig.patch
 
 # use SYSTEM_MALLOC on ppc/ppc64, -g1 on ppc/ppc64 to reduce archive size 
 Patch10: qtwebkit-ppc.patch
+
+# add missing function Double2Ints(), backport
+Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 ## upstream patches
 
@@ -99,6 +102,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch5 -p1 -b .fontconfig
 %ifarch ppc ppc64
 %patch10 -p1 -b .system-malloc
+%patch11 -p1 -b .Double2Ints
 %endif
 
 
@@ -158,6 +162,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Mar 05 2013 Than Ngo <than@redhat.com> - 2.3-0.3.beta2
+- add missing function Double2Ints() on ppc, backport
+
 * Mon Feb 25 2013 Than Ngo <than@redhat.com> - 2.3-0.2.beta2
 - fix 64k page issue on ppc/ppc64
 - set -g1 on ppc/ppc64 to reduce archive size
