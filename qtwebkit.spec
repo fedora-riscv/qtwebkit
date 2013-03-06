@@ -1,7 +1,9 @@
 
+%define pre rc1
+
 Name: qtwebkit
 Version: 2.3
-Release: 0.3.beta2%{?dist}
+Release: 0.4.%{pre}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -20,9 +22,10 @@ URL: http://trac.webkit.org/wiki/QtWebKit
 # $ mv qtwebkit-2.2.2-source/include qtwebkit-2.2.2-source/Source/
 # $ tar cJf qtwebkit-2.2.2-source.tar.xz qtwebkit-2.2.2-source/
 ##
-# download from https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-2.3-beta2b
+# download from
+# https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-2.3-rc1
 # repack as .xz
-Source0:  qtwebkit-2.3-beta2.tar.xz
+Source0:  qtwebkit-%{version}-%{pre}.tar.xz
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
@@ -34,10 +37,7 @@ Patch3: qtwebkit-2.3-debuginfo.patch
 # tweak linker flags to minimize memory usage on "small" platforms
 Patch4: qtwebkit-2.3-save_memory.patch
 
-# don't disable fontconfig on production_build (linking fails)
-Patch5: qtwebkit-2.3-fontconfig.patch
-
-# use SYSTEM_MALLOC on ppc/ppc64, -g1 on ppc/ppc64 to reduce archive size 
+# use SYSTEM_MALLOC on ppc/ppc64
 Patch10: qtwebkit-ppc.patch
 
 # add missing function Double2Ints(), backport
@@ -99,7 +99,6 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .save_memory
-%patch5 -p1 -b .fontconfig
 %ifarch ppc ppc64
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
@@ -162,6 +161,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Mar 05 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.4.rc1
+- 2.3-rc1
+
 * Tue Mar 05 2013 Than Ngo <than@redhat.com> - 2.3-0.3.beta2
 - add missing function Double2Ints() on ppc, backport
 

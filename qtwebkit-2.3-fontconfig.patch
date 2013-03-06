@@ -1,9 +1,0 @@
-diff -up webkit-qtwebkit-23/Source/WebCore/WebCore.pri.fontconfig webkit-qtwebkit-23/Source/WebCore/WebCore.pri
---- webkit-qtwebkit-23/Source/WebCore/WebCore.pri.fontconfig	2013-02-21 22:28:57.789764068 -0600
-+++ webkit-qtwebkit-23/Source/WebCore/WebCore.pri	2013-02-21 22:31:02.994198797 -0600
-@@ -356,4 +362,4 @@ contains(DEFINES, ENABLE_OPENCL=1) {
- 
- enable_fast_mobile_scrolling: DEFINES += ENABLE_FAST_MOBILE_SCROLLING=1
- 
--!production_build:contains(DEFINES, HAVE_FONTCONFIG=1): PKGCONFIG += fontconfig
-+contains(DEFINES, HAVE_FONTCONFIG=1): PKGCONFIG += fontconfig
