@@ -1,0 +1,29 @@
+From e28288309b95a1d4ea343c86d22f9b83983c7238 Mon Sep 17 00:00:00 2001
+From: Allan Sandfeld Jensen <allan.jensen@digia.com>
+Date: Fri, 8 Mar 2013 17:16:53 +0100
+Subject: [PATCH 2/2] REGRESSION(r110272) qt_webkit.pri not installed
+
+Readd modulefile to the INSTALLS.
+---
+ Source/api.pri | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Source/api.pri b/Source/api.pri
+index 7b604d8..9da4b9f 100644
+--- a/Source/api.pri
++++ b/Source/api.pri
+@@ -105,6 +105,11 @@ haveQt(5) {
+     # Install rules handled by Qt's module system
+ } else {
+     # For Qt4 we have to set up install rules manually
++    modulefile.files = $${ROOT_WEBKIT_DIR}/Tools/qmake/qt_webkit.pri
++    mkspecs = $$[QMAKE_MKSPECS]
++    mkspecs = $$split(mkspecs, :)
++    modulefile.path = $$last(mkspecs)/modules
++    INSTALLS += modulefile
+ 
+     # Syncqt has already run at this point, so we can use headers.pri
+     # as a basis for our install-rules
+-- 
+1.8.1.4
+

@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.3
-Release: 0.4.%{pre}%{?dist}
+Release: 0.5.%{pre}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -44,6 +44,8 @@ Patch10: qtwebkit-ppc.patch
 Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 ## upstream patches
+Patch101: 0001-Qt-Flash-objects-won-t-load-until-scrolling-page.patch
+Patch102: 0002-REGRESSION-r110272-qt_webkit.pri-not-installed.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -83,8 +85,6 @@ Summary: Development files for %{name}
 Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: qt4-devel
-# when qt_webkit_version.pri was moved from qt-devel => qt-webkit-devel
-Conflicts: qt-devel < 1:4.7.2-9
 Obsoletes: qt-webkit-devel < 1:4.9.0
 Provides:  qt-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel = 2:%{version}-%{release}
@@ -103,6 +103,8 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
 %endif
+%patch101 -p1 -b .0001
+%patch102 -p1 -b .0002
 
 
 %build 
@@ -154,6 +156,7 @@ rm -rf %{buildroot}
 
 %files devel
 %defattr(-,root,root,-)
+%{_qt4_datadir}/mkspecs/modules/qt_webkit.pri
 %{_qt4_headerdir}/QtWebKit/
 %{_qt4_libdir}/libQtWebKit.prl
 %{_qt4_libdir}/libQtWebKit.so
@@ -161,6 +164,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Mar 09 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.5.rc1
+- qt_webkit_version.pri is missing in 2.3-rc1 package (#919477)
+
 * Tue Mar 05 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.4.rc1
 - 2.3-rc1
 
