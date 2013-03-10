@@ -3,7 +3,7 @@
 
 Name: qtwebkit
 Version: 2.3
-Release: 0.5.%{pre}%{?dist}
+Release: 0.6.%{pre}%{?dist}
 Summary: Qt WebKit bindings
 Group: System Environment/Libraries
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -59,10 +59,11 @@ BuildRequires: pkgconfig(fontconfig)
 BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10)
 BuildRequires: pkgconfig(libpcre)
 BuildRequires: pkgconfig(libpng)
-BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork) 
+BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork) pkgconfig(QtXmlPatterns)
 BuildRequires: pkgconfig(sqlite3)
 BuildRequires: pkgconfig(xext)
 BuildRequires: pkgconfig(xrender)
+BuildRequires: pkgconfig(xslt)
 BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
 BuildRequires: ruby
@@ -164,6 +165,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Mar 09 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.6.rc1
+- should use libxml and libxslt (#919778)
+
 * Sat Mar 09 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.5.rc1
 - qt_webkit_version.pri is missing in 2.3-rc1 package (#919477)
 
