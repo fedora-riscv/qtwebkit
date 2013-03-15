@@ -1,11 +1,10 @@
 
-%define pre rc1
-
 Name: qtwebkit
-Version: 2.3
-Release: 0.6.%{pre}%{?dist}
 Summary: Qt WebKit bindings
-Group: System Environment/Libraries
+
+Version: 2.3.0
+Release: 1%{?dist}
+
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
 ## This was how qtwebkit-2.2 did it (no longer works for 2.3)
@@ -23,10 +22,9 @@ URL: http://trac.webkit.org/wiki/QtWebKit
 # $ tar cJf qtwebkit-2.2.2-source.tar.xz qtwebkit-2.2.2-source/
 ##
 # download from
-# https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-2.3-rc1
+# https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-2.3.0
 # repack as .xz
-Source0:  qtwebkit-%{version}-%{pre}.tar.xz
-BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+Source0:  qtwebkit-%{version}.tar.xz
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
 Patch1: webkit-qtwebkit-2.2-tp1-pluginpath.patch
@@ -44,8 +42,6 @@ Patch10: qtwebkit-ppc.patch
 Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 ## upstream patches
-Patch101: 0001-Qt-Flash-objects-won-t-load-until-scrolling-page.patch
-Patch102: 0002-REGRESSION-r110272-qt_webkit.pri-not-installed.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -59,6 +55,7 @@ BuildRequires: pkgconfig(fontconfig)
 BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10)
 BuildRequires: pkgconfig(libpcre)
 BuildRequires: pkgconfig(libpng)
+BuildRequires: pkgconfig(libwebp)
 BuildRequires: pkgconfig(libxslt)
 BuildRequires: pkgconfig(QtCore) pkgconfig(QtNetwork)
 BuildRequires: pkgconfig(sqlite3)
@@ -83,7 +80,6 @@ Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
 
 %package devel
 Summary: Development files for %{name}
-Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: qt4-devel
 Obsoletes: qt-webkit-devel < 1:4.9.0
@@ -104,8 +100,6 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
 %endif
-%patch101 -p1 -b .0001
-%patch102 -p1 -b .0002
 
 
 %build 
@@ -114,21 +108,21 @@ PATH=%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-# production_build is *supposed* to be default, but apparently not?
-# production_build drops -Werror compile flag
-
 ./Tools/Scripts/build-webkit \
   --qt \
-  --qmakearg="CONFIG+=production_build" \
-  --makeargs=%{?_smp_mflags}
+  --no-webkit2 \
+  --release \
+  --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
+  --makeargs=%{?_smp_mflags} \
+%ifarch %{ix86}
+   --no-force-sse2
+%endif
 
   
 %install
-rm -rf %{buildroot} 
-
 make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
 
-## HACK, there has to be a better way
+## HACK alert
 chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.?
 chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.? ||:
 
@@ -141,22 +135,16 @@ mv QtWebKit.pc.new QtWebKit.pc
 popd
 
 
-%clean
-rm -rf %{buildroot} 
-
-
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %{_qt4_libdir}/libQtWebKit.so.4*
 %if 0%{?_qt4_importdir:1}
 %{_qt4_importdir}/QtWebKit/
 %endif
 
 %files devel
-%defattr(-,root,root,-)
 %{_qt4_datadir}/mkspecs/modules/qt_webkit.pri
 %{_qt4_headerdir}/QtWebKit/
 %{_qt4_libdir}/libQtWebKit.prl
@@ -165,6 +153,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Mar 15 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.0-1
+- 2.3.0 (final)
+- enable libwebp support
+- .spec cleanup
+
 * Sat Mar 09 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3-0.6.rc1
 - should use libxml and libxslt (#919778)
 
