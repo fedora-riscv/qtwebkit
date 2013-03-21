@@ -123,7 +123,7 @@ QTDIR=%{_qt4_prefix}; export QTDIR
 make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
 
 ## HACK alert
-chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.?
+chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.? ||:
 chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.? ||:
 
 ## pkgconfig love
