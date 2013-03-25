@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -96,7 +96,8 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .save_memory
-%ifarch ppc ppc64
+# all big-endian arches require the Double2Ints fix
+%ifarch ppc ppc64 s390 s390x
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
 %endif
@@ -153,6 +154,9 @@ popd
 
 
 %changelog
+* Mon Mar 25 2013 Dan Horák <dan[at]danny.cz> 2.3.0-2
+- use ppc fixes also on s390
+
 * Fri Mar 15 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.0-1
 - 2.3.0 (final)
 - enable libwebp support
