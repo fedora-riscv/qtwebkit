@@ -2,8 +2,8 @@
 Name: qtwebkit
 Summary: Qt WebKit bindings
 
-Version: 2.3.0
-Release: 2%{?dist}
+Version: 2.3.1
+Release: 1%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -39,6 +39,7 @@ Patch4: qtwebkit-2.3-save_memory.patch
 Patch10: qtwebkit-ppc.patch
 
 # add missing function Double2Ints(), backport
+# rebased for 2.3.1, not sure if this is still needed?  -- rex
 Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 ## upstream patches
@@ -81,7 +82,6 @@ Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: qt4-devel
 Obsoletes: qt-webkit-devel < 1:4.9.0
 Provides:  qt-webkit-devel = 2:%{version}-%{release}
 Provides:  qt4-webkit-devel = 2:%{version}-%{release}
@@ -154,6 +154,10 @@ popd
 
 
 %changelog
+* Thu Apr 18 2013 Rex Dieter <rdieter@fedoraproject.org> - 2.3.1-1
+- qtwebkit-2.3.1
+- -devel: drop explicit Requires: qt4-devel (let pkgconfig deps do it)
+
 * Mon Mar 25 2013 Dan Horák <dan[at]danny.cz> 2.3.0-2
 - use ppc fixes also on s390
 
