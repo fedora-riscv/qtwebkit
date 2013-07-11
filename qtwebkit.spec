@@ -2,7 +2,7 @@
 Name: qtwebkit
 Summary: Qt WebKit bindings
 
-Version: 2.3.1
+Version: 2.3.2
 Release: 1%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
@@ -22,7 +22,7 @@ URL: http://trac.webkit.org/wiki/QtWebKit
 # $ tar cJf qtwebkit-2.2.2-source.tar.xz qtwebkit-2.2.2-source/
 ##
 # download from
-# https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-2.3.0
+# https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-%{version}
 # repack as .xz
 Source0:  qtwebkit-%{version}.tar.xz
 
@@ -154,6 +154,9 @@ popd
 
 
 %changelog
+* Thu Jul 11 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.2-1
+- qtwebkit-2.3.2
+
 * Thu Apr 18 2013 Rex Dieter <rdieter@fedoraproject.org> - 2.3.1-1
 - qtwebkit-2.3.1
 - -devel: drop explicit Requires: qt4-devel (let pkgconfig deps do it)
