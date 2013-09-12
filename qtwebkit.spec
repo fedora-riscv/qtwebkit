@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -43,6 +43,10 @@ Patch10: qtwebkit-ppc.patch
 Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 ## upstream patches
+# NonSharedCharacterBreakIterator leads to CRASH() in configurations that do not have COMPARE_AND_SWAP enabled
+# http://bugs.webkit.org/show_bug.cgi?id=101337
+# https://bugzilla.redhat.com/show_bug.cgi?id=1006539
+Patch100: qtwebkit-webkit101337.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -101,6 +105,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
 %endif
+%patch100 -p1 -b .webkit101337
 
 
 %build 
@@ -154,6 +159,9 @@ popd
 
 
 %changelog
+* Thu Sep 12 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.2-3
+- SIGSEGV - ~NonSharedCharacterBreakIterator (#1006539, webkit#101337)
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
