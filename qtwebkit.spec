@@ -2,8 +2,8 @@
 Name: qtwebkit
 Summary: Qt WebKit bindings
 
-Version: 2.3.2
-Release: 3%{?dist}
+Version: 2.3.3
+Release: 1%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -43,10 +43,14 @@ Patch10: qtwebkit-ppc.patch
 Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 ## upstream patches
-# NonSharedCharacterBreakIterator leads to CRASH() in configurations that do not have COMPARE_AND_SWAP enabled
-# http://bugs.webkit.org/show_bug.cgi?id=101337
-# https://bugzilla.redhat.com/show_bug.cgi?id=1006539
-Patch100: qtwebkit-webkit101337.patch
+Patch102: 0002-Texmap-GTK-The-poster-circle-doesn-t-appear.patch
+Patch103: 0003-Qt-Tiled-backing-store-not-clipped-to-frame-or-visib.patch
+Patch104: 0004-Qt-Images-scaled-poorly-on-composited-canvas.patch
+Patch105: 0005-Port-of-r118587-to-TextBreakIteratorQt.cpp.patch
+patch106: 0006-JSC-ARM-traditional-failing-on-Octane-NavierStokes-t.patch
+Patch107: 0007-Correct-range-used-for-Emoji-checks.patch
+Patch108: 0008-Qt-RepaintRequested-signal-sometimes-not-emitted.patch
+Patch109: 0009-TexMap-Remove-ParentChange-in-TextureMapperLayer.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -105,7 +109,15 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
 %endif
-%patch100 -p1 -b .webkit101337
+%patch102 -p1 -b .0002
+%patch103 -p1 -b .0003
+%patch104 -p1 -b .0004
+%patch105 -p1 -b .0005
+%patch106 -p1 -b .0006
+%patch107 -p1 -b .0007
+%patch108 -p1 -b .0008
+%patch109 -p1 -b .0009
+
 
 
 %build 
@@ -159,6 +171,10 @@ popd
 
 
 %changelog
+* Thu Oct 03 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-1
+- qtwebkit-2.3.3
+- include some post 2.3.3 commits/fixes
+
 * Thu Sep 12 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.2-3
 - SIGSEGV - ~NonSharedCharacterBreakIterator (#1006539, webkit#101337)
 
