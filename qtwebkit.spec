@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -35,7 +35,7 @@ Patch3: qtwebkit-2.3-debuginfo.patch
 # tweak linker flags to minimize memory usage on "small" platforms
 Patch4: qtwebkit-2.3-save_memory.patch
 
-# use SYSTEM_MALLOC on ppc/ppc64
+# use SYSTEM_MALLOC on ppc/ppc64, plus some additional minor tweaks (needed only on ppc? -- rex)
 Patch10: qtwebkit-ppc.patch
 
 # add missing function Double2Ints(), backport
@@ -132,6 +132,7 @@ QTDIR=%{_qt4_prefix}; export QTDIR
   --release \
   --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
   --makeargs=%{?_smp_mflags} \
+  --system-malloc \
 %ifarch %{ix86}
    --no-force-sse2
 %endif
@@ -171,6 +172,9 @@ popd
 
 
 %changelog
+* Mon Dec 09 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-2
+- build-webkit --system-malloc (uncontionally, WAS only ppc)
+
 * Thu Oct 03 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-1
 - qtwebkit-2.3.3
 - include some post 2.3.3 commits/fixes
