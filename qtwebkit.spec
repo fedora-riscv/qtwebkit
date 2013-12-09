@@ -173,7 +173,7 @@ popd
 
 %changelog
 * Mon Dec 09 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-2
-- build-webkit --system-malloc (uncontionally, WAS only ppc)
+- build-webkit --system-malloc (unconditionally, WAS only ppc)
 
 * Thu Oct 03 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-1
 - qtwebkit-2.3.3
