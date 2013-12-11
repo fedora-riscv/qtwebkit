@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -126,20 +126,43 @@ PATH=%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-./Tools/Scripts/build-webkit \
+mkdir -p %{_target_platform}
+pushd    %{_target_platform}
+WEBKITOUTPUTDIR=`pwd`; export WEBKITOUTPUTDIR
+../Tools/Scripts/build-webkit \
+  --qt \
+  --no-webkit2 \
+  --release \
+  --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
+  --makeargs=%{?_smp_mflags} \
+  --system-malloc
+popd
+
+%ifarch %{ix86}
+# build safe(r) non-sse2-enabled version
+mkdir -p %{_target_platform}-no_sse2
+pushd    %{_target_platform}-no_sse2
+WEBKITOUTPUTDIR=`pwd`; export WEBKITOUTPUTDIR
+../Tools/Scripts/build-webkit \
   --qt \
   --no-webkit2 \
   --release \
   --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
   --makeargs=%{?_smp_mflags} \
   --system-malloc \
-%ifarch %{ix86}
-   --no-force-sse2
+  --no-force-sse2
+popd
 %endif
 
   
 %install
-make install INSTALL_ROOT=%{buildroot} -C WebKitBuild/Release
+make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}/Release
+
+%ifarch %{ix86}
+mkdir -p %{buildroot}%{_qt4_libdir}/sse2/
+mv %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4* %{buildroot}%{_qt4_libdir}/sse2/
+make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}-no_sse2/Release
+%endif
 
 ## HACK alert
 chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.? ||:
@@ -159,6 +182,9 @@ popd
 
 %files
 %{_qt4_libdir}/libQtWebKit.so.4*
+%ifarch %{ix86}
+%{_qt4_libdir}/sse2/libQtWebKit.so.4*
+%endif
 %if 0%{?_qt4_importdir:1}
 %{_qt4_importdir}/QtWebKit/
 %endif
@@ -172,6 +198,10 @@ popd
 
 
 %changelog
+* Wed Dec 11 2013 Rex Dieter <rdieter@fedoraproject.org> - 2.3.3-3
+- support out-of-source-tree build
+- %%ix86: build both no-sse2 and sse2 versions
+
 * Mon Dec 09 2013 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-2
 - build-webkit --system-malloc (unconditionally, WAS only ppc)
 
