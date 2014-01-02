@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -198,6 +198,9 @@ popd
 
 
 %changelog
+* Wed Jan 01 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-4
+- rebuild (libwebp)
+
 * Wed Dec 11 2013 Rex Dieter <rdieter@fedoraproject.org> - 2.3.3-3
 - support out-of-source-tree build
 - %%ix86: build both no-sse2 and sse2 versions
