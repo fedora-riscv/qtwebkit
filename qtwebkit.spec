@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -41,6 +41,10 @@ Patch10: qtwebkit-ppc.patch
 # add missing function Double2Ints(), backport
 # rebased for 2.3.1, not sure if this is still needed?  -- rex
 Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
+
+# fix build when using bison3
+# https://qt.gitorious.org/qt/qtwebkit/commit/60ba8bd5b3575d
+Patch12: glslang_bison3.patch
 
 ## upstream patches
 Patch102: 0002-Texmap-GTK-The-poster-circle-doesn-t-appear.patch
@@ -109,6 +113,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
 %endif
+%patch12 -p1 -b .bison3
 %patch102 -p1 -b .0002
 %patch103 -p1 -b .0003
 %patch104 -p1 -b .0004
@@ -198,6 +203,9 @@ popd
 
 
 %changelog
+* Thu Feb 13 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-6
+- ftbfs using bison3
+
 * Wed Feb 12 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-5
 - rebuild (libicu)
 
