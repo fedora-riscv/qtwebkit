@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -55,6 +55,16 @@ patch106: 0006-JSC-ARM-traditional-failing-on-Octane-NavierStokes-t.patch
 Patch107: 0007-Correct-range-used-for-Emoji-checks.patch
 Patch108: 0008-Qt-RepaintRequested-signal-sometimes-not-emitted.patch
 Patch109: 0009-TexMap-Remove-ParentChange-in-TextureMapperLayer.patch
+Patch110: 0010-SVG-stroke-dasharray-not-working.patch
+Patch111: 0011-Texmap-CSS-filter-not-working-on-software-composited.patch
+Patch112: 0012-Do-not-try-to-compile-header-files-it-causes-weird-b.patch
+Patch114: 0014-Fix-crash-when-converting-QObjectList.patch
+Patch115: 0015-WebGL-EFL-Qt-GTK-Jelly-fishes-leave-trails-on-webgl-.patch
+Patch116: 0016-Extend-disabling-of-whole-program-optimizations-to-M.patch
+Patch117: 0017-OS-X-Mavericks-Xcode5-Find-libxslt-and-libxml2-heade.patch
+Patch118: 0018-Fix-QtWebKit-build-on-ARM-softfp.patch
+Patch119: 0019-Mouseup-event-does-not-fire-on-Scroll-Bar.patch
+Patch120: 0020-Make-it-possible-to-build-without-using-build-webkit.patch
 
 BuildRequires: bison
 BuildRequires: chrpath
@@ -122,6 +132,16 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch107 -p1 -b .0007
 %patch108 -p1 -b .0008
 %patch109 -p1 -b .0009
+%patch110 -p1 -b .0010
+%patch111 -p1 -b .0011
+%patch112 -p1 -b .0012
+%patch114 -p1 -b .0014
+%patch115 -p1 -b .0015
+%patch116 -p1 -b .0016
+%patch117 -p1 -b .0017
+%patch118 -p1 -b .0018
+%patch119 -p1 -b .0019
+%patch120 -p1 -b .0020
 
 
 
@@ -203,6 +223,9 @@ popd
 
 
 %changelog
+* Thu Feb 13 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-7
+- backport more upstream fixes
+
 * Thu Feb 13 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-6
 - ftbfs using bison3
 
