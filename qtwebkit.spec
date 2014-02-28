@@ -3,7 +3,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 7%{?dist}
+Release: 8%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -45,6 +45,9 @@ Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 # fix build when using bison3
 # https://qt.gitorious.org/qt/qtwebkit/commit/60ba8bd5b3575d
 Patch12: glslang_bison3.patch
+
+# support aarch64
+Patch13: qtwebkit-aarch64.patch 
 
 ## upstream patches
 Patch102: 0002-Texmap-GTK-The-poster-circle-doesn-t-appear.patch
@@ -115,15 +118,6 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %prep
 %setup -q -n webkit-qtwebkit-23
 
-%patch1 -p1 -b .pluginpath
-%patch3 -p1 -b .debuginfo
-%patch4 -p1 -b .save_memory
-# all big-endian arches require the Double2Ints fix
-%ifarch ppc ppc64 s390 s390x
-%patch10 -p1 -b .system-malloc
-%patch11 -p1 -b .Double2Ints
-%endif
-%patch12 -p1 -b .bison3
 %patch102 -p1 -b .0002
 %patch103 -p1 -b .0003
 %patch104 -p1 -b .0004
@@ -143,6 +137,16 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch119 -p1 -b .0019
 %patch120 -p1 -b .0020
 
+%patch1 -p1 -b .pluginpath
+%patch3 -p1 -b .debuginfo
+%patch4 -p1 -b .save_memory
+# all big-endian arches require the Double2Ints fix
+%ifarch ppc ppc64 s390 s390x
+%patch10 -p1 -b .system-malloc
+%patch11 -p1 -b .Double2Ints
+%endif
+%patch12 -p1 -b .bison3
+%patch13 -p1 -b .aarch64
 
 
 %build 
@@ -223,6 +227,10 @@ popd
 
 
 %changelog
+* Fri Feb 28 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-8
+- initial backport aarch64 javascriptcore fixes, needswork (#1070446)
+- apply downstream patches *after* upstream ones
+
 * Thu Feb 13 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-7
 - backport more upstream fixes
 
