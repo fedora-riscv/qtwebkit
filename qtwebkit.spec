@@ -1,9 +1,8 @@
-
 Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 8%{?dist}
+Release: 9%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -155,11 +154,17 @@ PATH=%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
+%ifarch aarch64
+%global qtdefines  DEFINES+=ENABLE_JIT=0 DEFINES+=ENABLE_YARR_JIT=0 DEFINES+=ENABLE_ASSEMBLER=0
+%else
+%global qtdefines  
+%endif
+
 mkdir -p %{_target_platform}
 pushd    %{_target_platform}
 WEBKITOUTPUTDIR=`pwd`; export WEBKITOUTPUTDIR
 ../Tools/Scripts/build-webkit \
-  --qt \
+  --qt %{?qtdefines} \
   --no-webkit2 \
   --release \
   --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
@@ -227,6 +232,9 @@ popd
 
 
 %changelog
+* Thu Mar  6 2014 Peter Robinson <pbrobinson@fedoraproject.org> 2.3.3-9
+- Update aarch64 patchset
+
 * Fri Feb 28 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-8
 - initial backport aarch64 javascriptcore fixes, needswork (#1070446)
 - apply downstream patches *after* upstream ones
