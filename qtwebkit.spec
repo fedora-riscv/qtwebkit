@@ -2,7 +2,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 9%{?dist}
+Release: 10%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -232,8 +232,11 @@ popd
 
 
 %changelog
-* Thu Mar  6 2014 Peter Robinson <pbrobinson@fedoraproject.org> 2.3.3-9
-- Update aarch64 patchset
+* Sat Mar 08 2014 Kevin Kofler <Kevin@tigcc.ticalc.org> 2.3.3-10
+- rebuild against fixed qt to fix -debuginfo (#1074041)
+
+* Thu Mar 06 2014 Peter Robinson <pbrobinson@fedoraproject.org> 2.3.3-9
+- update aarch64 patchset
 
 * Fri Feb 28 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-8
 - initial backport aarch64 javascriptcore fixes, needswork (#1070446)
