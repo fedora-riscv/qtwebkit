@@ -2,7 +2,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 10%{?dist}
+Release: 11%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -48,6 +48,9 @@ Patch12: glslang_bison3.patch
 # support aarch64
 Patch13: qtwebkit-aarch64.patch 
 
+# truly madly deeply no rpath please, kthxbye
+Patch14: webkit-qtwebkit-23-no_rpath.patch
+
 ## upstream patches
 Patch102: 0002-Texmap-GTK-The-poster-circle-doesn-t-appear.patch
 Patch103: 0003-Qt-Tiled-backing-store-not-clipped-to-frame-or-visib.patch
@@ -69,7 +72,6 @@ Patch119: 0019-Mouseup-event-does-not-fire-on-Scroll-Bar.patch
 Patch120: 0020-Make-it-possible-to-build-without-using-build-webkit.patch
 
 BuildRequires: bison
-BuildRequires: chrpath
 BuildRequires: flex
 BuildRequires: gperf
 BuildRequires: libicu-devel
@@ -146,6 +148,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %endif
 %patch12 -p1 -b .bison3
 %patch13 -p1 -b .aarch64
+%patch14 -p1 -b .no_rpath
 
 
 %build 
@@ -156,8 +159,6 @@ QTDIR=%{_qt4_prefix}; export QTDIR
 
 %ifarch aarch64
 %global qtdefines  DEFINES+=ENABLE_JIT=0 DEFINES+=ENABLE_YARR_JIT=0 DEFINES+=ENABLE_ASSEMBLER=0
-%else
-%global qtdefines  
 %endif
 
 mkdir -p %{_target_platform}
@@ -198,10 +199,6 @@ mv %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4* %{buildroot}%{_qt4_libdir}/sse2/
 make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}-no_sse2/Release
 %endif
 
-## HACK alert
-chrpath --list   %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.? ||:
-chrpath --delete %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4.10.? ||:
-
 ## pkgconfig love
 # drop Libs.private, it contains buildroot references, and
 # we don't support static linking libQtWebKit anyway
@@ -232,6 +229,11 @@ popd
 
 
 %changelog
+* Fri May 02 2014 Rex Dieter <rdieter@fedoraproject.org> 
+- 2.3.3-11
+- no need to set empty qtdefines macro
+- no rpath for real, drop chrpath hacks
+
 * Sat Mar 08 2014 Kevin Kofler <Kevin@tigcc.ticalc.org> 2.3.3-10
 - rebuild against fixed qt to fix -debuginfo (#1074041)
 
