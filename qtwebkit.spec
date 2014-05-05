@@ -2,7 +2,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 11%{?dist}
+Release: 12%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -100,6 +100,7 @@ Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
 
+Requires: mozilla-filesystem
 %{?_qt4_version:Requires: qt4%{?_isa} >= %{_qt4_version}}
 
 %description
@@ -229,8 +230,10 @@ popd
 
 
 %changelog
-* Fri May 02 2014 Rex Dieter <rdieter@fedoraproject.org> 
-- 2.3.3-11
+* Mon May 05 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-12
+- Requires: mozilla-filesystem (#1000673)
+
+* Fri May 02 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-11
 - no need to set empty qtdefines macro
 - no rpath for real, drop chrpath hacks
 
