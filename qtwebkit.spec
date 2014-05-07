@@ -2,7 +2,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 12%{?dist}
+Release: 13%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -51,12 +51,15 @@ Patch13: qtwebkit-aarch64.patch
 # truly madly deeply no rpath please, kthxbye
 Patch14: webkit-qtwebkit-23-no_rpath.patch
 
+# ppc64le support
+Patch15: qtwebkit-23-ppc64le.patch
+
 ## upstream patches
 Patch102: 0002-Texmap-GTK-The-poster-circle-doesn-t-appear.patch
 Patch103: 0003-Qt-Tiled-backing-store-not-clipped-to-frame-or-visib.patch
 Patch104: 0004-Qt-Images-scaled-poorly-on-composited-canvas.patch
 Patch105: 0005-Port-of-r118587-to-TextBreakIteratorQt.cpp.patch
-patch106: 0006-JSC-ARM-traditional-failing-on-Octane-NavierStokes-t.patch
+Patch106: 0006-JSC-ARM-traditional-failing-on-Octane-NavierStokes-t.patch
 Patch107: 0007-Correct-range-used-for-Emoji-checks.patch
 Patch108: 0008-Qt-RepaintRequested-signal-sometimes-not-emitted.patch
 Patch109: 0009-TexMap-Remove-ParentChange-in-TextureMapperLayer.patch
@@ -151,6 +154,11 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch13 -p1 -b .aarch64
 %patch14 -p1 -b .no_rpath
 
+## Apply this last patch, as it deps so aarch stuffs
+%ifarch ppc64le
+%patch10 -p1 -b .system-malloc
+%patch15 -p1 -b .ppc64le
+%endif
 
 %build 
 
@@ -158,7 +166,7 @@ PATH=%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-%ifarch aarch64
+%ifarch aarch64 ppc64le
 %global qtdefines  DEFINES+=ENABLE_JIT=0 DEFINES+=ENABLE_YARR_JIT=0 DEFINES+=ENABLE_ASSEMBLER=0
 %endif
 
@@ -230,6 +238,9 @@ popd
 
 
 %changelog
+* Wed May 07 2014 Jaromir Capik <jcapik@redhat.com> - 2.3.3-13
+- ppc64le support
+
 * Mon May 05 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-12
 - Requires: mozilla-filesystem (#1000673)
 
