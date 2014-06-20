@@ -2,7 +2,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 14%{?dist}
+Release: 15%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -95,8 +95,9 @@ BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
 BuildRequires: ruby
 %if 0%{?fedora}
-# for QtLocation, QtSensors 
-BuildRequires: qt-mobility-devel >= 1.2
+# qt-mobility bits
+BuildRequires: pkgconfig(QtLocation) >= 1.2
+BuildRequires: pkgconfig(QtSensors) >= 1.2
 %endif
 Obsoletes: qt-webkit < 1:4.9.0
 Provides: qt-webkit = 2:%{version}-%{release}
@@ -238,6 +239,9 @@ popd
 
 
 %changelog
+* Fri Jun 20 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-15
+- use pkgconfig deps for qt-mobility
+
 * Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.3-14
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
