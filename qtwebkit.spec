@@ -2,7 +2,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 15%{?dist}
+Release: 16%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -54,6 +54,9 @@ Patch14: webkit-qtwebkit-23-no_rpath.patch
 # ppc64le support
 Patch15: qtwebkit-23-ppc64le.patch
 
+# patch from openSUSE to support GStreamer 1.x (#1092642)
+Patch16: qtwebkit-2.3.3-gstreamer1.patch
+
 ## upstream patches
 Patch102: 0002-Texmap-GTK-The-poster-circle-doesn-t-appear.patch
 Patch103: 0003-Qt-Tiled-backing-store-not-clipped-to-frame-or-visib.patch
@@ -82,7 +85,15 @@ BuildRequires: libjpeg-devel
 BuildRequires: pkgconfig(gio-2.0) pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(fontconfig)
 # gstreamer media support
+%if 0%{?fedora} > 20 || 0%{?rhel} > 7
+%global gstreamer1 1
+BuildRequires: pkgconfig(gstreamer-1.0) pkgconfig(gstreamer-app-1.0)
+%else
+# We don't want to use GStreamer 1 where the rest of the Qt 4 stack doesn't,
+# or we run into symbol conflicts. So build against GStreamer 0.10 on Fedora up
+# to 20 and RHEL up to 7. (Up to RHEL 6, GStreamer 0.10 is the only option.)
 BuildRequires: pkgconfig(gstreamer-0.10) pkgconfig(gstreamer-app-0.10)
+%endif
 BuildRequires: pkgconfig(libpcre)
 BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(libwebp)
@@ -154,6 +165,10 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch12 -p1 -b .bison3
 %patch13 -p1 -b .aarch64
 %patch14 -p1 -b .no_rpath
+
+%if 0%{?gstreamer1}
+%patch16 -p1 -b .gstreamer1
+%endif
 
 ## Apply this last patch, as it deps so aarch stuffs
 %ifarch ppc64le
@@ -239,6 +254,9 @@ popd
 
 
 %changelog
+* Sun Jul 20 2014 Kevin Kofler <Kevin@tigcc.ticalc.org> 2.3.3-16
+- build against GStreamer1 on F21+ (#1092642, patch from openSUSE)
+
 * Fri Jun 20 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-15
 - use pkgconfig deps for qt-mobility
 
