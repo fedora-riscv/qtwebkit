@@ -188,7 +188,7 @@ install -m755 -D %{SOURCE1} bin/qmake
 
 CFLAGS="%{optflags}"; export CFLAGS
 CXXFLAGS="%{optflags}"; export CXXFLAGS
-LDFLAGS="%{__global_ldflags}"; export LDFLAGS
+LDFLAGS="%{?__global_ldflags}"; export LDFLAGS
 PATH=`pwd`/bin:%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
