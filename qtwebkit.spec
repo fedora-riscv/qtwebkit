@@ -1,8 +1,11 @@
+
+%global _hardened_build 1
+
 Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.3
-Release: 17%{?dist}
+Release: 18%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -24,6 +27,8 @@ URL: http://trac.webkit.org/wiki/QtWebKit
 # https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-%{version}
 # repack as .xz
 Source0:  qtwebkit-%{version}.tar.xz
+# qmake wrapper
+Source1:  qmake.sh
 
 # search /usr/lib{,64}/mozilla/plugins-wrapped for browser plugins too
 Patch1: webkit-qtwebkit-2.2-tp1-pluginpath.patch
@@ -176,9 +181,15 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch15 -p1 -b .ppc64le
 %endif
 
+install -m755 -D %{SOURCE1} bin/qmake
+
+
 %build 
 
-PATH=%{_qt4_bindir}:$PATH; export PATH
+CFLAGS="%{optflags}"; export CFLAGS
+CXXFLAGS="%{optflags}"; export CXXFLAGS
+LDFLAGS="%{__global_ldflags}"; export LDFLAGS
+PATH=`pwd`/bin:%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
@@ -254,6 +265,9 @@ popd
 
 
 %changelog
+* Tue Sep 23 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-18
+- enable hardened build (#1051790)
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.3-17
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
