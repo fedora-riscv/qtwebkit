@@ -4,8 +4,8 @@
 Name: qtwebkit
 Summary: Qt WebKit bindings
 
-Version: 2.3.3
-Release: 18%{?dist}
+Version: 2.3.4
+Release: 1%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -26,7 +26,8 @@ URL: http://trac.webkit.org/wiki/QtWebKit
 # download from
 # https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-%{version}
 # repack as .xz
-Source0:  qtwebkit-%{version}.tar.xz
+#Source0:  qtwebkit-%{version}.tar.xz
+Source0: http://download.kde.org/stable/qtwebkit-2.3/%{version}/src/qtwebkit-%{version}.tar.gz
 # qmake wrapper
 Source1:  qmake.sh
 
@@ -46,41 +47,13 @@ Patch10: qtwebkit-ppc.patch
 # rebased for 2.3.1, not sure if this is still needed?  -- rex
 Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
-# fix build when using bison3
-# https://qt.gitorious.org/qt/qtwebkit/commit/60ba8bd5b3575d
-Patch12: glslang_bison3.patch
-
-# support aarch64
-Patch13: qtwebkit-aarch64.patch 
-
 # truly madly deeply no rpath please, kthxbye
 Patch14: webkit-qtwebkit-23-no_rpath.patch
 
 # ppc64le support
 Patch15: qtwebkit-23-ppc64le.patch
 
-# patch from openSUSE to support GStreamer 1.x (#1092642)
-Patch16: qtwebkit-2.3.3-gstreamer1.patch
-
 ## upstream patches
-Patch102: 0002-Texmap-GTK-The-poster-circle-doesn-t-appear.patch
-Patch103: 0003-Qt-Tiled-backing-store-not-clipped-to-frame-or-visib.patch
-Patch104: 0004-Qt-Images-scaled-poorly-on-composited-canvas.patch
-Patch105: 0005-Port-of-r118587-to-TextBreakIteratorQt.cpp.patch
-Patch106: 0006-JSC-ARM-traditional-failing-on-Octane-NavierStokes-t.patch
-Patch107: 0007-Correct-range-used-for-Emoji-checks.patch
-Patch108: 0008-Qt-RepaintRequested-signal-sometimes-not-emitted.patch
-Patch109: 0009-TexMap-Remove-ParentChange-in-TextureMapperLayer.patch
-Patch110: 0010-SVG-stroke-dasharray-not-working.patch
-Patch111: 0011-Texmap-CSS-filter-not-working-on-software-composited.patch
-Patch112: 0012-Do-not-try-to-compile-header-files-it-causes-weird-b.patch
-Patch114: 0014-Fix-crash-when-converting-QObjectList.patch
-Patch115: 0015-WebGL-EFL-Qt-GTK-Jelly-fishes-leave-trails-on-webgl-.patch
-Patch116: 0016-Extend-disabling-of-whole-program-optimizations-to-M.patch
-Patch117: 0017-OS-X-Mavericks-Xcode5-Find-libxslt-and-libxml2-heade.patch
-Patch118: 0018-Fix-QtWebKit-build-on-ARM-softfp.patch
-Patch119: 0019-Mouseup-event-does-not-fire-on-Scroll-Bar.patch
-Patch120: 0020-Make-it-possible-to-build-without-using-build-webkit.patch
 
 BuildRequires: bison
 BuildRequires: flex
@@ -138,26 +111,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 
 %prep
-%setup -q -n webkit-qtwebkit-23
-
-%patch102 -p1 -b .0002
-%patch103 -p1 -b .0003
-%patch104 -p1 -b .0004
-%patch105 -p1 -b .0005
-%patch106 -p1 -b .0006
-%patch107 -p1 -b .0007
-%patch108 -p1 -b .0008
-%patch109 -p1 -b .0009
-%patch110 -p1 -b .0010
-%patch111 -p1 -b .0011
-%patch112 -p1 -b .0012
-%patch114 -p1 -b .0014
-%patch115 -p1 -b .0015
-%patch116 -p1 -b .0016
-%patch117 -p1 -b .0017
-%patch118 -p1 -b .0018
-%patch119 -p1 -b .0019
-%patch120 -p1 -b .0020
+%setup -q -c -n webkit-qtwebkit-23
 
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
@@ -167,13 +121,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch10 -p1 -b .system-malloc
 %patch11 -p1 -b .Double2Ints
 %endif
-%patch12 -p1 -b .bison3
-%patch13 -p1 -b .aarch64
 %patch14 -p1 -b .no_rpath
-
-%if 0%{?gstreamer1}
-%patch16 -p1 -b .gstreamer1
-%endif
 
 ## Apply this last patch, as it deps so aarch stuffs
 %ifarch ppc64le
@@ -205,7 +153,7 @@ WEBKITOUTPUTDIR=`pwd`; export WEBKITOUTPUTDIR
   --no-webkit2 \
   --release \
   --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
-  --makeargs=%{?_smp_mflags} \
+  --makeargs="%{?_smp_mflags}" \
   --system-malloc
 popd
 
@@ -219,7 +167,7 @@ WEBKITOUTPUTDIR=`pwd`; export WEBKITOUTPUTDIR
   --no-webkit2 \
   --release \
   --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
-  --makeargs=%{?_smp_mflags} \
+  --makeargs="%{?_smp_mflags}" \
   --system-malloc \
   --no-force-sse2
 popd
@@ -265,6 +213,9 @@ popd
 
 
 %changelog
+* Thu Oct 16 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-1
+- qtwebkit-2.3.4
+
 * Tue Sep 23 2014 Rex Dieter <rdieter@fedoraproject.org> 2.3.3-18
 - enable hardened build (#1051790)
 
