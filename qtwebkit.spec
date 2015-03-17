@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -141,7 +141,7 @@ PATH=`pwd`/bin:%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-%ifarch aarch64 ppc64le
+%ifarch aarch64
 %global qtdefines  DEFINES+=ENABLE_JIT=0 DEFINES+=ENABLE_YARR_JIT=0 DEFINES+=ENABLE_ASSEMBLER=0
 %endif
 
@@ -213,6 +213,9 @@ popd
 
 
 %changelog
+* Tue Mar 17 2015 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-3
+- qtwebkit enable jit for ppc64le (#1096330)
+
 * Wed Feb 18 2015 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-2
 - rebuild (gcc5)
 
