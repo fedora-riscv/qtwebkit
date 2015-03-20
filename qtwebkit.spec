@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -54,13 +54,18 @@ Patch14: webkit-qtwebkit-23-no_rpath.patch
 Patch15: qtwebkit-23-ppc64le.patch
 
 ## upstream patches
+# backport from qt5-qtwebkit
+# qtwebkit: undefined symbol: g_type_class_adjust_private_offset
+# https://bugzilla.redhat.com/show_bug.cgi?id=1202735
+Patch100: webkit-qtwebkit-23-gcc5.patch
 
 BuildRequires: bison
 BuildRequires: flex
 BuildRequires: gperf
 BuildRequires: libicu-devel
 BuildRequires: libjpeg-devel
-BuildRequires: pkgconfig(gio-2.0) pkgconfig(glib-2.0)
+BuildRequires: pkgconfig(gio-2.0)
+BuildRequires: pkgconfig(glib-2.0) >= 2.10
 BuildRequires: pkgconfig(fontconfig)
 # gstreamer media support
 %if 0%{?fedora} > 20 || 0%{?rhel} > 7
@@ -95,6 +100,10 @@ Provides: qt4-webkit%{?_isa} = 2:%{version}-%{release}
 
 Requires: mozilla-filesystem
 %{?_qt4_version:Requires: qt4%{?_isa} >= %{_qt4_version}}
+%global glib2_version %(pkg-config --modversion glib-2.0 2>/dev/null || echo "2.10")
+## Naughty glib2, adding new symbols without soname bump or symbol versioning... -- rex
+## https://bugzilla.redhat.com/show_bug.cgi?id=1202735
+Requires: glib2%{?_isa} >= %{glib2_version}
 
 %description
 %{summary}
@@ -128,6 +137,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch10 -p1 -b .system-malloc
 %patch15 -p1 -b .ppc64le
 %endif
+%patch100 -p1 -b .gcc5
 
 install -m755 -D %{SOURCE1} bin/qmake
 
@@ -213,6 +223,10 @@ popd
 
 
 %changelog
+* Fri Mar 20 2015 Rex Dieter <rdieter@fedoraproject.org> - 2.3.4-4
+- gcc-5.0.0-0.20.fc23 FTBFS qtwebkit (#1203008)
+- add versioned glib2 dep (#1202735)
+
 * Tue Mar 17 2015 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-3
 - qtwebkit enable jit for ppc64le (#1096330)
 
