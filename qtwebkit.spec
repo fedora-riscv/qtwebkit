@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -49,9 +49,6 @@ Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 # truly madly deeply no rpath please, kthxbye
 Patch14: webkit-qtwebkit-23-no_rpath.patch
-
-# ppc64le support
-Patch15: qtwebkit-23-ppc64le.patch
 
 ## upstream patches
 # backport from qt5-qtwebkit
@@ -125,18 +122,16 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .save_memory
-# all big-endian arches require the Double2Ints fix
-%ifarch ppc ppc64 s390 s390x
+%ifarch ppc ppc64 ppc64le s390 s390x
 %patch10 -p1 -b .system-malloc
+%endif
+%ifarch ppc ppc64 s390 s390x
+# all big-endian arches require the Double2Ints fix
+# still needed?  -- rex
 %patch11 -p1 -b .Double2Ints
 %endif
 %patch14 -p1 -b .no_rpath
 
-## Apply this last patch, as it deps so aarch stuffs
-%ifarch ppc64le
-%patch10 -p1 -b .system-malloc
-%patch15 -p1 -b .ppc64le
-%endif
 %patch100 -p1 -b .gcc5
 
 install -m755 -D %{SOURCE1} bin/qmake
@@ -223,6 +218,9 @@ popd
 
 
 %changelog
+* Mon Mar 23 2015 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-5
+- drop ppc64le patch (that no longer applies or is needed)
+
 * Fri Mar 20 2015 Rex Dieter <rdieter@fedoraproject.org> - 2.3.4-4
 - gcc-5.0.0-0.20.fc23 FTBFS qtwebkit (#1203008)
 - add versioned glib2 dep (#1202735)
