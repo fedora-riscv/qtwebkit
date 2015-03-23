@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -55,6 +55,8 @@ Patch14: webkit-qtwebkit-23-no_rpath.patch
 # qtwebkit: undefined symbol: g_type_class_adjust_private_offset
 # https://bugzilla.redhat.com/show_bug.cgi?id=1202735
 Patch100: webkit-qtwebkit-23-gcc5.patch
+# backport from qt5-qtwebkit: URLs visited during private browsing show up in WebpageIcons.db
+Patch101: webkit-qtwebkit-23-private_browsing.patch
 
 BuildRequires: bison
 BuildRequires: flex
@@ -133,6 +135,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch14 -p1 -b .no_rpath
 
 %patch100 -p1 -b .gcc5
+%patch101 -p1 -b .private_browsing
 
 install -m755 -D %{SOURCE1} bin/qmake
 
@@ -218,6 +221,9 @@ popd
 
 
 %changelog
+* Mon Mar 23 2015 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-6
+- QtWebKit logs visited URLs to WebpageIcons.db in private browsing mode (#1204795)
+
 * Mon Mar 23 2015 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-5
 - drop ppc64le patch (that no longer applies or is needed)
 
