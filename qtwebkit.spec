@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 6%{?dist}
+Release: 7%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -221,6 +221,9 @@ popd
 
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 2.3.4-7
+- Rebuilt for GCC 5 C++11 ABI change
+
 * Mon Mar 23 2015 Rex Dieter <rdieter@fedoraproject.org> 2.3.4-6
 - QtWebKit logs visited URLs to WebpageIcons.db in private browsing mode (#1204795)
 
