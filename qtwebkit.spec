@@ -86,6 +86,7 @@ BuildRequires: pkgconfig(xext)
 BuildRequires: pkgconfig(xrender)
 BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
+BuildRequires: perl(Getopt::Long)
 BuildRequires: ruby
 %if 0%{?fedora}
 # qt-mobility bits
