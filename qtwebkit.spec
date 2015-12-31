@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 9%{?dist}
+Release: 10%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -125,10 +125,10 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .save_memory
-%ifarch ppc ppc64 ppc64le s390 s390x
+%ifarch ppc ppc64 ppc64le s390 s390x %{mips}
 %patch10 -p1 -b .system-malloc
 %endif
-%ifarch ppc ppc64 s390 s390x
+%ifarch ppc ppc64 s390 s390x mips mips64
 # all big-endian arches require the Double2Ints fix
 # still needed?  -- rex
 %patch11 -p1 -b .Double2Ints
@@ -150,7 +150,7 @@ PATH=`pwd`/bin:%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-%ifarch aarch64
+%ifarch aarch64 %{mips}
 %global qtdefines  DEFINES+=ENABLE_JIT=0 DEFINES+=ENABLE_YARR_JIT=0 DEFINES+=ENABLE_ASSEMBLER=0
 %endif
 
@@ -222,6 +222,9 @@ popd
 
 
 %changelog
+* Wed Dec 30 2015 Michal Toman <mtoman@fedoraproject.org> - 2.3.4-10
+- Add support for MIPS (#1294886)
+
 * Mon Dec 28 2015 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 2.3.4-9
 - Rebuilt for libwebp soname bump
 
