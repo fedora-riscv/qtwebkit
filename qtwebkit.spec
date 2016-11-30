@@ -87,7 +87,7 @@ BuildRequires: pkgconfig(xrender)
 BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
 BuildRequires: perl(Getopt::Long)
-BuildRequires: ruby
+BuildRequires: ruby ruby(rubygems)
 %if 0%{?fedora}
 # qt-mobility bits
 BuildRequires: pkgconfig(QtLocation) >= 1.2
