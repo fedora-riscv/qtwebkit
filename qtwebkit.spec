@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 11%{?dist}
+Release: 12%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -222,6 +222,9 @@ popd
 
 
 %changelog
+* Wed Nov 30 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.3.4-12
+- rebuild
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
