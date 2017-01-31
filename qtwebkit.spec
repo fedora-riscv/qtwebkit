@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 12%{?dist}
+Release: 13%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -87,6 +87,7 @@ BuildRequires: pkgconfig(xrender)
 BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
 BuildRequires: perl(Getopt::Long)
+BuildRequires: python
 BuildRequires: ruby ruby(rubygems)
 %if 0%{?fedora}
 # qt-mobility bits
@@ -222,6 +223,9 @@ popd
 
 
 %changelog
+* Tue Jan 31 2017 Merlin Mathesius <mmathesi@redhat.com> - 2.3.4-13
+- Add BuildRequires: python to fix FTBFS (BZ#1418102).
+
 * Wed Nov 30 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.3.4-12
 - rebuild
 
