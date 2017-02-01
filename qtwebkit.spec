@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 13%{?dist}
+Release: 14%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -223,6 +223,9 @@ popd
 
 
 %changelog
+* Wed Feb 01 2017 Sandro Mani <manisandro@gmail.com> - 2.3.4-14
+- Rebuild (libwebp)
+
 * Tue Jan 31 2017 Merlin Mathesius <mmathesi@redhat.com> - 2.3.4-13
 - Add BuildRequires: python to fix FTBFS (BZ#1418102).
 
