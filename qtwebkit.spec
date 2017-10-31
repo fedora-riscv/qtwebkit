@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 18%{?dist}
+Release: 19%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -67,7 +67,7 @@ BuildRequires: pkgconfig(gio-2.0)
 BuildRequires: pkgconfig(glib-2.0) >= 2.10
 BuildRequires: pkgconfig(fontconfig)
 # gstreamer media support
-%if 0%{?fedora} > 20 || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7
 %global gstreamer1 1
 BuildRequires: pkgconfig(gstreamer-1.0) pkgconfig(gstreamer-app-1.0)
 %else
@@ -89,7 +89,7 @@ BuildRequires: perl(Digest::MD5)
 BuildRequires: perl(Getopt::Long)
 BuildRequires: python
 BuildRequires: ruby ruby(rubygems)
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 # qt-mobility bits
 BuildRequires: pkgconfig(QtLocation) >= 1.2
 BuildRequires: pkgconfig(QtSensors) >= 1.2
@@ -223,6 +223,9 @@ popd
 
 
 %changelog
+* Wed Oct 25 2017 Troy Dawson <tdawson@redhat.com> - 2.3.4-19
+- Cleanup spec file conditionals
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-18
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
