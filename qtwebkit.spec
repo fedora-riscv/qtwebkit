@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 20%{?dist}
+Release: 21%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -87,7 +87,7 @@ BuildRequires: pkgconfig(xrender)
 BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
 BuildRequires: perl(Getopt::Long)
-BuildRequires: python
+BuildRequires: python2
 BuildRequires: ruby ruby(rubygems)
 %if 0%{?fedora} || 0%{?rhel} > 7
 # qt-mobility bits
@@ -223,6 +223,10 @@ popd
 
 
 %changelog
+* Sun Mar 18 2018 Iryna Shcherbina <ishcherb@redhat.com> - 2.3.4-21
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-20
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
