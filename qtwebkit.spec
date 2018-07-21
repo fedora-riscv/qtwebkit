@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 22%{?dist}
+Release: 23%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -60,6 +60,7 @@ Patch101: webkit-qtwebkit-23-private_browsing.patch
 
 BuildRequires: bison
 BuildRequires: flex
+BuildRequires: gcc-c++
 BuildRequires: gperf
 BuildRequires: libicu-devel
 BuildRequires: libjpeg-devel
@@ -88,6 +89,7 @@ BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
 BuildRequires: perl(Getopt::Long)
 BuildRequires: python2
+BuildRequires: %{_bindir}/python
 BuildRequires: ruby ruby(rubygems)
 %if 0%{?fedora} || 0%{?rhel} > 7
 # qt-mobility bits
@@ -223,6 +225,9 @@ popd
 
 
 %changelog
+* Sat Jul 21 2018 Rex Dieter <rdieter@fedoraproject.org> - 2.3.4-23
+- BR: %%_bindir/python gcc-c++ (#1606056)
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-22
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
