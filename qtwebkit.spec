@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 23%{?dist}
+Release: 24%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -96,6 +96,10 @@ BuildRequires: ruby ruby(rubygems)
 BuildRequires: pkgconfig(QtLocation) >= 1.2
 BuildRequires: pkgconfig(QtSensors) >= 1.2
 %endif
+# workaround bad embedded png files, https://bugzilla.redhat.com/1639422
+BuildRequires:  findutils
+BuildRequires:  pngcrush
+
 Obsoletes: qt-webkit < 1:4.9.0
 Provides: qt-webkit = 2:%{version}-%{release}
 Provides: qt4-webkit = 2:%{version}-%{release}
@@ -142,6 +146,9 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch101 -p1 -b .private_browsing
 
 install -m755 -D %{SOURCE1} bin/qmake
+
+# find/fix pngs with "libpng warning: iCCP: known incorrect sRGB profile"
+find -name \*.png | xargs -n3 pngcrush -ow -fix
 
 
 %build 
@@ -225,6 +232,9 @@ popd
 
 
 %changelog
+* Sat Nov 24 2018 Rex Dieter <rdieter@fedoraproject.org> - 2.3.4-24
+- QtWebkit bundles malformed PNG files (#1639422)
+
 * Sat Jul 21 2018 Rex Dieter <rdieter@fedoraproject.org> - 2.3.4-23
 - BR: %%_bindir/python gcc-c++ (#1606056)
 
