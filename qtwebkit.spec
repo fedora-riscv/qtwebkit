@@ -211,8 +211,7 @@ mv QtWebKit.pc.new QtWebKit.pc
 popd
 
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 %files
 %{_qt4_libdir}/libQtWebKit.so.4*
