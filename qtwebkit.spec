@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 26%{?dist}
+Release: 27%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -89,7 +89,6 @@ BuildRequires: perl(version)
 BuildRequires: perl(Digest::MD5)
 BuildRequires: perl(Getopt::Long)
 BuildRequires: python2
-BuildRequires: %{_bindir}/python
 BuildRequires: ruby ruby(rubygems)
 %if 0%{?fedora} || 0%{?rhel} > 7
 # qt-mobility bits
@@ -128,6 +127,11 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 %prep
 %setup -q -c -n webkit-qtwebkit-23
+
+# add an unversioned python symlink to python2 to the PATH (FTBFS #1736570)
+mkdir python2-unversioned-command
+ln -s %{__python2} python2-unversioned-command/python
+export PATH=`pwd`"/python2-unversioned-command:$PATH"
 
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
@@ -231,6 +235,9 @@ popd
 
 
 %changelog
+* Sun Aug 11 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-27
+- Fix FTBFS due to unversioned python no longer being Python 2 (#1736570)
+
 * Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-26
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
