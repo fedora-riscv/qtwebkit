@@ -233,7 +233,7 @@ popd
 
 
 %changelog
-* Sun Aug 11 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-27
+* Sun Aug 11 2019 Kevin Kofler <Kevin@tigcc.ticalc.org> - 2.3.4-27
 - Fix FTBFS due to unversioned python no longer being Python 2 (#1736570)
 
 * Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-26
