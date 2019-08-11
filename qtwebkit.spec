@@ -5,28 +5,10 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 27%{?dist}
+Release: 28%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
-## This was how qtwebkit-2.2 did it (no longer works for 2.3)
-# get make-package.py:
-# $ git clone git://qt.gitorious.org/qtwebkit/tools.git
-# get Qt WebKit source code:
-# $ git clone git://gitorious.org/+qtwebkit-developers/webkit/qtwebkit.git
-# create a branch from a tag (e.g. qtwebkit-2.2.2):
-# $ git checkout -b qtwebkit-2.2.2 qtwebkit-2.2.2
-# generate the tarball (requires: bison flex gperf):
-# $ make-package.py
-# fix/repack the generated tarball:
-# $ tar xzf qtwebkit-2.2.2-source.tar.gz
-# $ mv qtwebkit-2.2.2-source/include qtwebkit-2.2.2-source/Source/
-# $ tar cJf qtwebkit-2.2.2-source.tar.xz qtwebkit-2.2.2-source/
-##
-# download from
-# https://gitorious.org/webkit/qtwebkit-23/archive-tarball/qtwebkit-%{version}
-# repack as .xz
-#Source0:  qtwebkit-%{version}.tar.xz
 Source0: http://download.kde.org/stable/qtwebkit-2.3/%{version}/src/qtwebkit-%{version}.tar.gz
 # qmake wrapper
 Source1:  qmake.sh
@@ -178,31 +160,9 @@ WEBKITOUTPUTDIR=`pwd`; export WEBKITOUTPUTDIR
   --system-malloc
 popd
 
-%ifarch %{ix86}
-# build safe(r) non-sse2-enabled version
-mkdir -p %{_target_platform}-no_sse2
-pushd    %{_target_platform}-no_sse2
-WEBKITOUTPUTDIR=`pwd`; export WEBKITOUTPUTDIR
-../Tools/Scripts/build-webkit \
-  --qt \
-  --no-webkit2 \
-  --release \
-  --qmakearg="CONFIG+=production_build DEFINES+=HAVE_LIBWEBP=1" \
-  --makeargs="%{?_smp_mflags}" \
-  --system-malloc \
-  --no-force-sse2
-popd
-%endif
-
   
 %install
 make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}/Release
-
-%ifarch %{ix86}
-mkdir -p %{buildroot}%{_qt4_libdir}/sse2/
-mv %{buildroot}%{_qt4_libdir}/libQtWebKit.so.4* %{buildroot}%{_qt4_libdir}/sse2/
-make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}-no_sse2/Release
-%endif
 
 ## pkgconfig love
 # drop Libs.private, it contains buildroot references, and
@@ -217,9 +177,6 @@ popd
 
 %files
 %{_qt4_libdir}/libQtWebKit.so.4*
-%ifarch %{ix86}
-%{_qt4_libdir}/sse2/libQtWebKit.so.4*
-%endif
 %if 0%{?_qt4_importdir:1}
 %{_qt4_importdir}/QtWebKit/
 %endif
@@ -233,6 +190,11 @@ popd
 
 
 %changelog
+* Sun Aug 11 2019 Kevin Kofler <Kevin@tigcc.ticalc.org> - 2.3.4-28
+- Remove obsolete comments about source tarball generation (an upstream release
+  tarball has been used for years and there is and will be no better source)
+- Drop the extra no-sse2 build on i686, Fedora has required SSE2 since F29
+
 * Sun Aug 11 2019 Kevin Kofler <Kevin@tigcc.ticalc.org> - 2.3.4-27
 - Fix FTBFS due to unversioned python no longer being Python 2 (#1736570)
 
