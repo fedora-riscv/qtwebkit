@@ -128,11 +128,6 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %prep
 %setup -q -c -n webkit-qtwebkit-23
 
-# add an unversioned python symlink to python2 to the PATH (FTBFS #1736570)
-mkdir python2-unversioned-command
-ln -s %{__python2} python2-unversioned-command/python
-export PATH=`pwd`"/python2-unversioned-command:$PATH"
-
 %patch1 -p1 -b .pluginpath
 %patch3 -p1 -b .debuginfo
 %patch4 -p1 -b .save_memory
@@ -156,11 +151,14 @@ find -name \*.png | xargs -n3 pngcrush -ow -fix
 
 
 %build 
+# add an unversioned python symlink to python2 to the PATH (FTBFS #1736570)
+mkdir python2-unversioned-command
+ln -s %{__python2} python2-unversioned-command/python
 
 CFLAGS="%{optflags}"; export CFLAGS
 CXXFLAGS="%{optflags}"; export CXXFLAGS
 LDFLAGS="%{?__global_ldflags}"; export LDFLAGS
-PATH=`pwd`/bin:%{_qt4_bindir}:$PATH; export PATH
+PATH=`pwd`/python2-unversioned-command:`pwd`/bin:%{_qt4_bindir}:$PATH; export PATH
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
