@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 28%{?dist}
+Release: 29%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -190,6 +190,9 @@ popd
 
 
 %changelog
+* Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-29
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Sun Aug 11 2019 Kevin Kofler <Kevin@tigcc.ticalc.org> - 2.3.4-28
 - Remove obsolete comments about source tarball generation (an upstream release
   tarball has been used for years and there is and will be no better source)
