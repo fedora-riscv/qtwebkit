@@ -1,3 +1,8 @@
+# qtwebkit is known not to work properly with LTO at this point.  Some of the issues
+# are being worked on upstream and disabling LTO should be re-evaluated as
+# we update this change.  Until such time...
+# Disable LTO
+%global _lto_cflags %{nil}
 
 %global _hardened_build 1
 
