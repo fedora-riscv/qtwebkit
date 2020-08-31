@@ -5,7 +5,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 31%{?dist}
+Release: 32%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -80,6 +80,7 @@ BuildRequires: pkgconfig(QtSensors) >= 1.2
 # workaround bad embedded png files, https://bugzilla.redhat.com/1639422
 BuildRequires:  findutils
 BuildRequires:  pngcrush
+BuildRequires:  perl-File-Find perl-FindBin perl-lib perl-English
 
 Obsoletes: qt-webkit < 1:4.9.0
 Provides: qt-webkit = 2:%{version}-%{release}
@@ -190,6 +191,9 @@ popd
 
 
 %changelog
+* Mon Aug 31 2020 Than Ngo <than@redhat.com> - 2.3.4-32
+- Fixed FTBFS
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-31
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
