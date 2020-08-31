@@ -44,6 +44,8 @@ Patch14: webkit-qtwebkit-23-no_rpath.patch
 Patch100: webkit-qtwebkit-23-gcc5.patch
 # backport from qt5-qtwebkit: URLs visited during private browsing show up in WebpageIcons.db
 Patch101: webkit-qtwebkit-23-private_browsing.patch
+# fix FTBFS with bison-3.7
+Patch102: qtwebkit-bison-3.7.patch
 
 BuildRequires: bison
 BuildRequires: flex
@@ -131,6 +133,9 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 
 %patch100 -p1 -b .gcc5
 %patch101 -p1 -b .private_browsing
+%if 0%{?fedora} > 33 || 0%{?rhel} > 8
+%patch102 -p1 -b .bison37
+%endif
 
 install -m755 -D %{SOURCE1} bin/qmake
 
