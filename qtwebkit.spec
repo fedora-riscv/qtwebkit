@@ -47,6 +47,7 @@ Patch101: webkit-qtwebkit-23-private_browsing.patch
 # fix FTBFS with bison-3.7
 Patch102: qtwebkit-bison-3.7.patch
 
+BuildRequires: make
 BuildRequires: bison
 BuildRequires: flex
 BuildRequires: gcc-c++
