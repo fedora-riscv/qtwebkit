@@ -10,7 +10,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 34%{?dist}
+Release: 35%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -46,6 +46,8 @@ Patch100: webkit-qtwebkit-23-gcc5.patch
 Patch101: webkit-qtwebkit-23-private_browsing.patch
 # fix FTBFS with bison-3.7
 Patch102: qtwebkit-bison-3.7.patch
+# fix FTBFS wtih glib ≥ 2.68
+Patch103: webkit-qtwebkit-23-glib2.patch
 
 BuildRequires: make
 BuildRequires: bison
@@ -137,6 +139,9 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %if 0%{?fedora} > 33 || 0%{?rhel} > 8
 %patch102 -p1 -b .bison37
 %endif
+%if 0%{?fedora} > 34 || 0%{?rhel} > 8
+%patch103 -p1 -b .glib2
+%endif
 
 install -m755 -D %{SOURCE1} bin/qmake
 
@@ -202,6 +207,9 @@ popd
 
 
 %changelog
+* Thu Sep 16 2021 Than Ngo <than@redhat.com> - 2.3.4-35
+- Fixed FTBFS with glib2
+
 * Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-34
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
