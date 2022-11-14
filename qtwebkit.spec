@@ -10,7 +10,7 @@ Name: qtwebkit
 Summary: Qt WebKit bindings
 
 Version: 2.3.4
-Release: 38%{?dist}
+Release: 38.rv64%{?dist}
 
 License: LGPLv2 with exceptions or GPLv3 with exceptions
 URL: http://trac.webkit.org/wiki/QtWebKit
@@ -36,6 +36,9 @@ Patch11: qtwebkit-23-LLInt-C-Loop-backend-ppc.patch
 
 # truly madly deeply no rpath please, kthxbye
 Patch14: webkit-qtwebkit-23-no_rpath.patch
+
+# add RISC-V (riscv64) support
+Patch20: webkit-qtwebkit-23-riscv64.patch
 
 ## upstream patches
 # backport from qt5-qtwebkit
@@ -133,6 +136,7 @@ Provides:  qt4-webkit-devel%{?_isa} = 2:%{version}-%{release}
 %patch11 -p1 -b .Double2Ints
 %endif
 %patch14 -p1 -b .no_rpath
+%patch20 -p1 -b .riscv64
 
 %patch100 -p1 -b .gcc5
 %patch101 -p1 -b .private_browsing
@@ -161,8 +165,13 @@ PATH=`pwd`/python2-unversioned-command:`pwd`/bin:%{_qt4_bindir}:$PATH; export PA
 QMAKEPATH=`pwd`/Tools/qmake; export QMAKEPATH
 QTDIR=%{_qt4_prefix}; export QTDIR
 
-%ifarch aarch64 %{mips}
+%ifarch aarch64 %{mips} riscv64
 %global qtdefines  DEFINES+=ENABLE_JIT=0 DEFINES+=ENABLE_YARR_JIT=0 DEFINES+=ENABLE_ASSEMBLER=0
+%endif
+
+%ifarch riscv64
+export CFLAGS="$CFLAGS -fpermissive"
+export CXXFLAGS="$CXXFLAGS -fpermissive"
 %endif
 
 mkdir -p %{_target_platform}
@@ -207,8 +216,14 @@ popd
 
 
 %changelog
+* Sun May 14 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 2.3.4-38.rv64
+- Cherry-pick davidlt's patch for Fedora 38 riscv64 rebuild.
+
 * Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-38
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Mon Oct 14 2022 David Abdurachmanov <davidlt@rivosinc.com> - 2.3.4-37.0.riscv64
+- Add support for riscv64
 
 * Sat Jul 23 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.4-37
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild

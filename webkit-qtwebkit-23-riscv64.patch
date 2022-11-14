@@ -1,0 +1,93 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a91f2559..94cb34fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -76,6 +76,8 @@ ELSEIF (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64|amd64)")
+     SET(WTF_CPU_X86_64 1)
+ ELSEIF (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "(i[3-6]86|x86)")
+     SET(WTF_CPU_X86 1)
++ELSEIF (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^riscv64")
++    SET(WTF_CPU_RISCV64 1)
+ ELSE ()
+     MESSAGE(FATAL_ERROR "Unknown CPU '${CMAKE_SYSTEM_PROCESSOR}'")
+ ENDIF ()
+diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
+index 0a7a8bd3..14fbcdbf 100644
+--- a/Source/JavaScriptCore/CMakeLists.txt
++++ b/Source/JavaScriptCore/CMakeLists.txt
+@@ -471,6 +471,7 @@ IF (WTF_CPU_ARM)
+ ELSEIF (WTF_CPU_MIPS)
+ ELSEIF (WTF_CPU_X86)
+ ELSEIF (WTF_CPU_X86_64)
++ELSEIF (WTF_CPU_RISCV64)
+ ELSE ()
+     MESSAGE(FATAL_ERROR "Unknown CPU")
+ ENDIF ()
+diff --git a/Source/JavaScriptCore/JavaScriptCore.pri b/Source/JavaScriptCore/JavaScriptCore.pri
+index e5f4362c..f175d09e 100644
+--- a/Source/JavaScriptCore/JavaScriptCore.pri
++++ b/Source/JavaScriptCore/JavaScriptCore.pri
+@@ -37,6 +37,14 @@ macx: INCLUDEPATH += $$JAVASCRIPTCORE_GENERATED_SOURCES_DIR/$$activeBuildConfig(
+ 
+ win32-*: LIBS += -lwinmm
+ 
++# Hack around RISCV64 fail wrt JSValue.h
++# SValue.h unconditionally casts pointer to int32_t.
++# add -fpermissive locally as a workaround
++equals(QT_ARCH, riscv64) {
++    message("JavaScriptCore riscv64 hack: -fpermissive")
++    QMAKE_CXXFLAGS += -fpermissive
++}
++
+ wince* {
+     INCLUDEPATH += $$QT.core.sources/../3rdparty/ce-compat
+     INCLUDEPATH += $$SOURCE_DIR/os-win32
+diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
+index 56c6f256..639063bb 100644
+--- a/Source/WTF/wtf/Platform.h
++++ b/Source/WTF/wtf/Platform.h
+@@ -164,6 +164,11 @@
+ #define WTF_CPU_BIG_ENDIAN 1
+ #endif
+ 
++/* CPU(RISCV64) - RISCV64 */
++#if defined(__riscv) && defined(__riscv_xlen) && __riscv_xlen == 64
++#define WTF_CPU_RISCV64 1
++#endif
++
+ /* CPU(X86) - i386 / x86 32-bit */
+ #if   defined(__i386__) \
+     || defined(i386)     \
+@@ -906,7 +911,8 @@
+     || CPU(S390X) \
+     || CPU(AARCH64) \
+     || CPU(MIPS64) \
+-    || CPU(PPC64)
++    || CPU(PPC64) \
++    || CPU(RISCV64)
+ #define WTF_USE_JSVALUE64 1
+ #else
+ #define WTF_USE_JSVALUE32_64 1
+@@ -932,7 +938,8 @@
+     && (CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(MIPS)) \
+     && (OS(DARWIN) || !COMPILER(GCC) || GCC_VERSION_AT_LEAST(4, 1, 0)) \
+     && !OS(WINCE) \
+-    && !OS(QNX)
++    && !OS(QNX) \
++    && !CPU(RISCV64)
+ #define ENABLE_JIT 1
+ #endif
+ 
+diff --git a/Source/WTF/wtf/dtoa/utils.h b/Source/WTF/wtf/dtoa/utils.h
+index bc17f043..91493297 100644
+--- a/Source/WTF/wtf/dtoa/utils.h
++++ b/Source/WTF/wtf/dtoa/utils.h
+@@ -49,7 +49,7 @@
+ defined(__ARMEL__) || \
+ defined(_MIPS_ARCH_MIPS32R2)
+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
+-#elif CPU(MIPS) || CPU(PPC) || CPU(PPC64) || OS(WINCE) || CPU(SH4) || CPU(S390) || CPU(S390X) || CPU(IA64) || CPU(SPARC) || CPU(ALPHA) || CPU(MIPS64) || CPU(AARCH64) || CPU(HPPA)
++#elif CPU(MIPS) || CPU(PPC) || CPU(PPC64) || OS(WINCE) || CPU(SH4) || CPU(S390) || CPU(S390X) || CPU(IA64) || CPU(SPARC) || CPU(ALPHA) || CPU(MIPS64) || CPU(AARCH64) || CPU(HPPA) || CPU(RISCV64)
+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
+ #elif defined(_M_IX86) || defined(__i386__)
+ #if defined(_WIN32)
